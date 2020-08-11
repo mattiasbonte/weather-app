@@ -74,7 +74,7 @@
     const apiKey = '16b8985dd4d01e5dda0af6d392345499';
     const countryCode = 'BE';
     const weatherCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city},${countryCode}&appid=${apiKey}`;
-    // this gets the data from every 3 hours for the next 5 days, (24/3)*5=40 datapoints
+    // this gets the data from every 3 hours for the next 5 days, (24/3)*5= 40 data points
     const response = await fetch(weatherCall);
     return response.json();
   }

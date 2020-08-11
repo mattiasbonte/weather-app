@@ -32,14 +32,14 @@
   </head>
 
   <body class="container box-border p-2 mx-auto prose bg-gray-300">
-    <header class="m-5 text-center text-gray-500">Weather App</header>
+    <header class="m-5 font-bold text-center text-gray-500">Weather App</header>
 
     <nav class=""></nav>
 
     <main class="">
       <div
         id="inputDiv"
-        class="max-w-sm p-5 mx-auto text-center bg-gray-100 border rounded-lg shadow-md hover:shadow-lg"
+        class="max-w-sm p-5 mx-auto mb-16 text-center bg-gray-100 border rounded-lg shadow-md sm:mb-24 hover:shadow-lg"
       >
         <div
           class="flex flex-wrap items-center justify-between py-2 border-b border-teal-500"
@@ -61,16 +61,146 @@
         </div>
       </div>
 
-      <div id="tempTableDiv" class="my-3">
-        <div id="tempTable" class="grid grid-cols-1 gap-5">
+      <div id="weatherBox" class="relative my-3">
+        <!-- WEATHER ICON -->
+        <img
+          class="absolute left-0 right-0 z-20 w-20 p-2 mx-auto transition duration-700 transform -translate-y-12 bg-gray-300 rounded-full sm:-translate-y-20 sm:w-32 easy-linear hover:scale-110"
+          title="Weather state"
+          src="images/forecast/sun.svg"
+          alt="Current weather state icon"
+        />
+
+        <!-- MOBILE BOX -->
+        <div
+          id="mobileBox"
+          class="grid items-center grid-cols-6 grid-rows-3 p-4 text-center bg-white border rounded-lg shadow-md"
+        >
+          <!-- MIN -->
+          <div
+            class="self-start col-start-1 row-start-1 m-1 bg-blue-300 rounded-lg shadow"
+          >
+            <p class="text-xs text-gray-600">min</p>
+            <p id="list.main.temp_min">20°</p>
+          </div>
+          <!-- MAX -->
+          <div
+            class="self-start col-start-2 row-start-1 m-1 text-white bg-red-300 rounded-lg shadow"
+          >
+            <p class="text-xs text-gray-600">max</p>
+            <p id="list.main.temp_max">40°</p>
+          </div>
+
+          <!-- FEELS LIKE -->
+          <div class="self-start col-start-5 col-end-7 row-start-1 m-1 rounded-lg shadow">
+            <p class="text-xs text-gray-600">feels like</p>
+            <p id="list.main.feels_like">26°</p>
+          </div>
+
+          <!-- TIME & CITY -->
+          <div class="self-start col-start-1 col-end-3 row-start-2">
+            <p id="timeNow" class="text-3xl font-bold">18:00</p>
+            <p id="cityName" class="text-lg font-bold">BREDENE</p>
+          </div>
+
+          <!-- TEMP -->
+          <div
+            id="list.main.temp"
+            class="self-end col-start-3 col-end-5 row-start-1 row-end-3 p-2 m-1 text-5xl font-bold"
+          >
+            <p class="transform translate-y-3">30</p>
+            <p class="text-2xl">°C</p>
+          </div>
+
+          <!-- RAIN & CLOUD PROB -->
+          <div class="col-start-5 row-start-2 m-1 text-xs">
+            <p class="text-gray-600">rain</p>
+            <p id="list.pop" class="text-lg">
+              50<span class="text-xs text-gray-500">%</span>
+            </p>
+          </div>
+          <div class="col-start-6 row-start-2 m-1 text-xs">
+            <p class="text-gray-600">clouds</p>
+            <p id="list.clouds.all" class="text-lg">
+              50<span class="text-xs text-gray-500">%</span>
+            </p>
+          </div>
+
+          <!-- RAIN & SNOW VOL -->
+          <div
+            class="self-end col-start-1 row-start-3 p-1 m-1 text-xs rounded-full shadow"
+          >
+            <p class="text-gray-600">rain</p>
+            <p id="list.rain.3h" class="text-lg">10</p>
+            <p class="text-gray-500">hPa</p>
+          </div>
+          <div
+            class="self-end col-start-2 row-start-3 p-1 m-1 text-xs rounded-full shadow"
+          >
+            <p class="text-gray-600">snow</p>
+            <p id="list.snow.3h" class="text-lg">10</p>
+            <p class="text-gray-500">mm</p>
+          </div>
+
+          <!-- WIND -->
+          <div
+            class="relative w-32 col-start-3 col-end-5 row-start-3 row-end-4 p-1 m-1 mx-auto text-white bg-gray-700 rounded-full shadow-md"
+          >
+            <img
+              title="Wind Rose"
+              src="images/forecast/windrose.svg"
+              class="w-16 mx-auto rounded-full"
+              alt="Wind rose icon pointing in wind direction"
+            />
+            <div
+              id="list.wind.speed"
+              class="absolute top-0 left-0 right-0 mx-auto transform translate-y-5"
+            >
+              <p class="text-lg">10</p>
+              <p class="text-xs text-gray-500">m/s</p>
+            </div>
+            <!-- <p id="list.wind.deg">NNE</p> -->
+          </div>
+
+          <!-- PRESSURE -->
+          <div
+            class="self-end col-start-5 row-start-3 p-1 m-1 text-xs rounded-full shadow"
+          >
+            <p class="text-gray-600">
+              sea
+            </p>
+            <p id="list.main.sea_level" class="text-lg">
+              20
+            </p>
+            <p class="text-gray-500">hPa</p>
+          </div>
+          <div
+            class="self-end col-start-6 row-start-3 p-1 m-1 text-xs rounded-full shadow"
+          >
+            <p class="text-gray-600">
+              land
+            </p>
+            <p id="list.main.grnd_level" class="text-lg">
+              50
+            </p>
+            <p class="text-gray-500">hPa</p>
+          </div>
+
+          <!-- <p>Humid</p>
+          <p id="list.main.humidity">50%</p>
+          <p>Fog</p>
+          <p id="list.visibility">20m</p> -->
+        </div>
+      </div>
+
+      <!-- <div id="tempTable" class="grid grid-cols-1 gap-5">
           <div class="p-4 bg-white border rounded-lg shadow-md">
             <h1 class="col-span-2">MON (#day)</h1>
             <p class="text-right">TIME:&nbsp;</p>
             <p class="text-left">&nbsp;1800</p>
             <p class="text-right">TEMP:&nbsp;</p>
           </div>
-        </div>
-        <!-- <div id="tempTable" class="grid grid-cols-5 gap-5">
+        </div> -->
+      <!-- <div id="tempTable" class="grid grid-cols-5 gap-5">
           <div class="grid grid-cols-2 text-center bg-white rounded-md shadow">
             <h1 class="col-span-2">MON (#day)</h1>
             <p class="text-right">TIME:&nbsp;</p>
@@ -121,7 +251,6 @@
             <p class="text-left">32*</p>
           </div>
         </div> -->
-      </div>
     </main>
 
     <aside class=""></aside>

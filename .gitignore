@@ -1,0 +1,6 @@
+# filename.ext   (File ignored)
+# foldername/    (Folder ignored)
+# *.ext          (Extention ingored)
+
+#MACOS
+*.DS_store
