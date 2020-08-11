@@ -31,14 +31,113 @@
     <script src="scripts/index.js" defer></script>
   </head>
 
-  <body class="box-border">
-    <header class="">HeaderText</header>
+  <body class="container box-border p-2 mx-auto prose bg-gray-300">
+    <header class="m-5 text-center text-gray-500">Weather App</header>
+
     <nav class=""></nav>
+
     <main class="">
-      <article></article>
-      <section></section>
+      <div
+        id="inputDiv"
+        class="max-w-sm p-5 mx-auto text-center bg-gray-100 border rounded-lg shadow-md hover:shadow-lg"
+      >
+        <div
+          class="flex flex-wrap items-center justify-between py-2 border-b border-teal-500"
+        >
+          <input
+            id="input"
+            class="w-40 px-2 py-1 leading-tight text-gray-700 bg-transparent border-none appearance-none focus:outline-none"
+            type="text"
+            placeholder="City"
+            aria-label="City"
+          />
+          <button
+            id="submit"
+            class="px-2 py-1 text-sm text-white bg-teal-500 border-4 border-teal-500 rounded hover:bg-teal-700 hover:border-teal-700"
+            type="button"
+          >
+            Go
+          </button>
+        </div>
+      </div>
+
+      <div id="tempTableDiv" class="my-3">
+        <div id="tempTable" class="grid grid-cols-1 gap-5">
+          <div class="p-4 bg-white border rounded-lg shadow-md">
+            <h1 class="col-span-2">MON (#day)</h1>
+            <p class="text-right">TIME:&nbsp;</p>
+            <p class="text-left">&nbsp;1800</p>
+            <p class="text-right">TEMP:&nbsp;</p>
+          </div>
+        </div>
+        <!-- <div id="tempTable" class="grid grid-cols-5 gap-5">
+          <div class="grid grid-cols-2 text-center bg-white rounded-md shadow">
+            <h1 class="col-span-2">MON (#day)</h1>
+            <p class="text-right">TIME:&nbsp;</p>
+            <p class="text-left">&nbsp;1800</p>
+            <p class="text-right">TEMP:&nbsp;</p>
+            <p class="text-left">&nbsp;32*</p>
+            <p class="text-right">MIN:&nbsp;</p>
+            <p class="text-left">&nbsp;25*</p>
+            <p class="text-right">MAX:&nbsp;</p>
+            <p class="text-left">&nbsp;40*</p>
+            <p class="text-right">HUMID:&nbsp;</p>
+            <p class="text-left">&nbsp;100*</p>
+          </div>
+          <div class="grid grid-cols-2 text-center bg-white rounded-md shadow">
+            <h1 class="col-span-2">MON</h1>
+            <p class="text-right">DAY:&nbsp;</p>
+            <p class="text-left">&nbsp;12</p>
+            <p class="text-right">TIME</p>
+            <p class="text-left">1800</p>
+            <p class="text-right">TEMP</p>
+            <p class="text-left">32*</p>
+          </div>
+          <div class="grid grid-cols-2 text-center bg-white rounded-md shadow">
+            <h1 class="col-span-2">MON</h1>
+            <p class="text-right">DAY</p>
+            <p class="text-left">12</p>
+            <p class="text-right">TIME</p>
+            <p class="text-left">1800</p>
+            <p class="text-right">TEMP</p>
+            <p class="text-left">32*</p>
+          </div>
+          <div class="grid grid-cols-2 text-center bg-white rounded-md shadow">
+            <h1 class="col-span-2">MON</h1>
+            <p class="text-right">DAY</p>
+            <p class="text-left">12</p>
+            <p class="text-right">TIME</p>
+            <p class="text-left">1800</p>
+            <p class="text-right">TEMP</p>
+            <p class="text-left">32*</p>
+          </div>
+          <div class="grid grid-cols-2 text-center bg-white rounded-md shadow">
+            <h1 class="col-span-2">MON</h1>
+            <p class="text-right">DAY</p>
+            <p class="text-left">12</p>
+            <p class="text-right">TIME</p>
+            <p class="text-left">1800</p>
+            <p class="text-right">TEMP</p>
+            <p class="text-left">32*</p>
+          </div>
+        </div> -->
+      </div>
     </main>
+
     <aside class=""></aside>
-    <footer class=""></footer>
+
+    <footer class="">
+      <!-- WEATHER FORECAST ICON PACK
+      <a href="https://www.flaticon.com/authors/linector" title="Linector">Linector</a>
+      from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+
+      WEATHER GOODWARE
+      <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a>
+      from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+
+      WEATHER ICON
+      <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from
+      <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> -->
+    </footer>
   </body>
 </html>
