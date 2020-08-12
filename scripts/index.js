@@ -21,7 +21,6 @@
   document.querySelector('#submit').onclick = () => {
     animInputDiv();
     const city = document.querySelector('input').value;
-    setCity(city);
     const weather = getWeather(city).catch(error);
     getWeather(city).catch(error);
     printTemp(1, weather);
@@ -99,10 +98,31 @@
       clearTimeout(timeout);
     }, 1520);
   }
-  // TODO: Show weather of next 5 days
-  // TODO: Display line graph of temp over time chart.js
 
-  // FETCH
+  // Compare Button
+  function animCompare() {
+    // audio
+    const audioWhoop = new Audio('../audio/whoop.mp3');
+    audioWhoop.play();
+    // Open/Close compareDiv on click
+    const compareDiv = document.querySelector('#compareDiv');
+    let compClick = 1;
+    // TODO: NEED TO FIND A WAY TO ACCESS A GRID
+
+    if (compClick === 1) {
+      /* gameInfo.classList.remove('hidden');
+      gameInfo.classList.add('flex'); */
+      compClick = 0;
+    } else {
+      /* gameInfo.classList.remove('flex');
+      gameInfo.classList.add('hidden'); */
+      compClick = 1;
+    }
+  }
+
+  // ========== //
+  // FETCH DATA //
+  // ========== //
   async function getWeather(city) {
     const apiKey = '16b8985dd4d01e5dda0af6d392345499';
     const countryCode = 'BE';
@@ -116,31 +136,34 @@
     console.error(error);
   }
 
-  // PRINT
+  // ============= //
+  // PRINTING HTML //
+  // ============= //
   async function printTemp(days, weather) {
     // Wait for Data from API
     const data = await weather;
 
     // City Name
     const cityName = data.city.name;
+    setCity(cityName);
 
     // Show WeatherBox
     const weatherBox = document.querySelector('#weatherBox').classList;
     weatherBox.remove('hidden');
 
-    // Print CURRENT [0]
+    // Print CURRENT [0] //
     // TEMPS
     const temp = document.querySelector('#temp');
     const currentTemp = `${(data.list[0].main.temp - 273).toFixed(0)}°`;
-    temp.textContent = currentTemp;
-    temp.title = `It's currently ${currentTemp} Celsius in ${cityName}`;
     const min = document.querySelector('#min');
     const minTemp = `${(data.list[0].main.temp_min - 273).toFixed(0)}°`;
-    min.textContent = minTemp;
-    min.title = `It will be minimum ${minTemp} Celsius in ${cityName}`;
     const max = document.querySelector('#max');
     const maxTemp = `${(data.list[0].main.temp_max - 273).toFixed(0)}°`;
+    temp.textContent = currentTemp;
+    min.textContent = minTemp;
     max.textContent = maxTemp;
+    temp.title = `It's currently ${currentTemp} Celsius in ${cityName}`;
+    min.title = `It will be minimum ${minTemp} Celsius in ${cityName}`;
     max.title = `It will be maximum ${maxTemp} Celsius in ${cityName}`;
     // FEELS
     const feels = document.querySelector('#feels');
@@ -160,15 +183,20 @@
     thisCity.textContent = cityName;
     // Probability RAIN
     const probRain = document.querySelector('#probRain');
-    probRain.textContent = data.list[0].pop;
-    probRain.title = `There is a ${data.list[0].pop}% chance of rain in ${cityName}`;
+    probRain.textContent = data.list[0].pop * 100;
+    probRain.title = `There is a ${
+      data.list[0].pop * 100
+    }% chance of rain in ${cityName}`;
     // Probability CLOUDS
     const probCloud = document.querySelector('#probCloud');
-    probCloud.textContent = data.list[0].clouds.all;
-    probCloud.title = `${data.list[0].clouds.all}% of the sky in ${cityName} is covered by clouds`;
+    const probCld = data.list[0].clouds.all;
+    probCloud.textContent = probCld;
+    probCloud.title = `${probCld}% of the sky in ${cityName} is covered by clouds`;
     // HUMIDITY
     const humidity = document.querySelector('#humidity');
-    humidity.textContent = data.list[0].main.humidity;
+    const humid = data.list[0].main.humidity;
+    humidity.textContent = humid;
+    humidity.title = `There is ${humid}% humidity in the air in ${cityName}`;
     // VISIBILITY
     const visibility = document.querySelector('#visibility');
     const sight = data.list[0].visibility;
@@ -176,31 +204,34 @@
     visibility.title = `It's possible to see ${sight} meters far in ${cityName}`;
     // WIND
     const windSpeed = document.querySelector('#windSpeed');
-    windSpeed.textContent = data.list[0].wind.speed.toFixed(0);
     const windDeg = document.querySelector('#windDeg');
+    const windSpd = data.list[0].wind.speed.toFixed(0);
     const windDegree = data.list[0].wind.deg;
-    windDeg.style.transform = `rotate(${windDegree}deg)`;
     const windPos = windDir(windDegree);
-    windDeg.title = `The wind in ${cityName} is blowing to ${windPos} at ${data.list[0].wind.speed.toFixed(
-      0
-    )}m/s `;
+    windSpeed.textContent = windSpd;
+    windDeg.style.transform = `rotate(${windDegree}deg)`;
+    windDeg.title = `The wind in ${cityName} is blowing to ${windPos} at ${windSpd}m/s `;
     // PRESSURES
     const sea = document.querySelector('#presSea');
-    sea.textContent = data.list[0].main.sea_level;
-    sea.title = `Atmospheric pressure on the sea level is ${data.list[0].main.sea_level} hPa`;
+    const seaPress = data.list[0].main.sea_level;
     const land = document.querySelector('#presLand');
-    land.textContent = data.list[0].main.grnd_level;
-    land.title = `Atmospheric pressure on the land level is ${data.list[0].main.grnd_level} hPa`;
+    const landPress = data.list[0].main.grnd_level;
+    sea.textContent = seaPress;
+    land.textContent = landPress;
+    sea.title = `Atmospheric pressure at sea level is ${seaPress} hPa`;
+    land.title = `Atmospheric pressure at ${cityName}'s ground level is ${landPress} hPa`;
     // STATUS
     const status = document.querySelector('#status');
-    status.textContent = data.list[0].weather[0].description;
     const statusIcon = document.querySelector('#statusIcon');
+    const description = data.list[0].weather[0].description;
+    status.textContent = description;
     statusIcon.src = `http://openweathermap.org/img/w/${data.list[0].weather[0].icon}.png`;
-    statusIcon.alt = `${data.list[0].weather[0].description} icon`;
-    statusIcon.title = data.list[0].weather[0].description;
+    statusIcon.alt = `${description} icon`;
+    statusIcon.title = `${description} in ${cityName}`;
 
-    //
-    // Print FORECAST [1-39]
+    // ===================== //
+    // Print FORECAST [1-39] //
+    // ===================== //
     const forecast = document.querySelector('#forecast');
     let forecastPrint = '';
     data.list.forEach((interval, i) => {
@@ -208,6 +239,7 @@
       const time = interval.dt_txt;
       const date = new Date(time);
       let day = date.getDay();
+      let fullDay;
       let hours = date.getHours();
       hours < 10 ? (hours = `0${hours}`) : '';
       hours = `${hours}:00`;
@@ -234,10 +266,33 @@
           day = 'Sat';
           break;
       }
+      switch (day) {
+        case 'Sun':
+          fullDay = 'Sunday';
+          break;
+        case 'Mon':
+          fullDay = 'Monday';
+          break;
+        case 'Tue':
+          fullDay = 'Tuesday';
+          break;
+        case 'Wed':
+          fullDay = 'Wednesday';
+          break;
+        case 'Thu':
+          fullDay = 'Thursday';
+          break;
+        case 'Fri':
+          fullDay = 'Friday';
+          break;
+        case 'Sat':
+          fullDay = 'Saturday';
+          break;
+      }
       // Get Temp
       const temp = `${(interval.main.temp - 273).toFixed(0)}°`;
       // Get Prob Rain
-      const probRain = interval.pop;
+      const probRain = (interval.pop * 100).toFixed(0);
       // Get Wind Speed & Direction
       const windSpeed = interval.wind.speed;
       const windDegree = interval.wind.deg;
@@ -252,26 +307,31 @@
             <p>${day}</p>
             <p>${hours}</p>
           </div>
-          <p class="text-xl" title="It will be ${temp} Celsius in ${cityName}">${temp}</p>
+          <p class="text-xl" title="It will be ${temp} Celsius at ${hours} in ${cityName}">${temp}</p>
           <div class="hidden text-gray-400 sm:block">
-            <p title="There is ${probRain}% change of rain in ${cityName}">${probRain}</p>
-            <p title="The wind in ${cityName} will blow to ${windPos} at a speed of ${windSpeed}m/s">${windSpeed}</p>
+            <p title="There is ${probRain}% change of rain on ${fullDay} around ${hours} in ${cityName}">${probRain}</p>
+            <p title="The wind at ${fullDay} around ${hours} in ${cityName} will blow ${windPos} at ${windSpeed}m/s">${windSpeed}</p>
           </div>
         </div>
         `;
       forecastPrint += segment;
     });
-
-    // Add Segments to html
+    // Add all Segments to html
     forecast.innerHTML = forecastPrint;
   }
 
-  // TODO: Fetch weather of next 5 days
-
+  // TODO: Display line graph of temp over time chart.js
   // PHOTO
   // TODO: use unsplash.com to show photo of requested city
 
-  // COMPARE
+  // ======= //
+  // COMPARE //
+  // ======= //
+  document.querySelector('#compare').onclick = () => {
+    animCompare();
+    console.log('compared!!');
+  };
+
   // TODO: Give option to compare 2 cities
 
   //
