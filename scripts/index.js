@@ -100,11 +100,11 @@
     min.textContent = `${(data.list[0].main.temp_min - 273).toFixed(0)}°`;
     const max = document.querySelector('#max');
     max.textContent = `${(data.list[0].main.temp_max - 273).toFixed(0)}°`;
-    // STATUS
-    const status = document.querySelector('#status');
-    status.textContent = data.list[0].weather[0].description;
+    // FEELS
     const feels = document.querySelector('#feels');
-    feels.textContent = `${(data.list[0].main.feels_like - 273).toFixed(0)}°`;
+    const feelsTemp = `${(data.list[0].main.feels_like - 273).toFixed(0)}°`;
+    feels.textContent = feelsTemp;
+    feels.title = `It feels like it's ${feelsTemp} outside`;
     // TIME
     const thisTime = document.querySelector('#thisTime');
     const date = new Date();
@@ -112,7 +112,6 @@
     const hours = date.getHours();
     let minutes = date.getMinutes();
     minutes < 10 ? (minutes = `0${minutes}`) : '';
-
     thisTime.textContent = `${hours}:${minutes}`;
     // CITY
     const thisCity = document.querySelector('#thisCity');
@@ -120,23 +119,39 @@
     // Probability RAIN
     const probRain = document.querySelector('#probRain');
     probRain.textContent = data.list[0].pop;
+    probRain.title = `There is a ${data.list[0].pop}% chance of rain in ${data.city.name}`;
     // Probability CLOUDS
     const probCloud = document.querySelector('#probCloud');
     probCloud.textContent = data.list[0].clouds.all;
+    probCloud.title = `${data.list[0].clouds.all}% of the sky in ${data.city.name} is covered with clouds`;
     // HUMIDITY
     const humidity = document.querySelector('#humidity');
     humidity.textContent = data.list[0].main.humidity;
     // VISIBILITY in meters
     const visibility = document.querySelector('#visibility');
     const sight = data.list[0].visibility;
-    visibility.title = `${sight} meter visibility`;
     sight > 900 ? (visibility.textContent = '+900') : (visibility.textContent = sight);
-
+    visibility.title = `It's possible to see ${sight} meters far in ${data.city.name}`;
+    // WIND
+    const windSpeed = document.querySelector('#windSpeed');
+    windSpeed.textContent = data.list[0].wind.speed.toFixed(0);
+    const windDeg = document.querySelector('#windDeg');
+    windDeg.style.transform = `rotate(${data.list[0].wind.deg}deg)`;
+    windDeg.title = `The wind is blowing at ${data.list[0].wind.speed.toFixed(0)}m/s in ${
+      data.city.name
+    }`;
     // PRESSURES
     const sea = document.querySelector('#presSea');
-    const land = document.querySelector('#presLand');
     sea.textContent = data.list[0].main.sea_level;
+    const land = document.querySelector('#presLand');
     land.textContent = data.list[0].main.grnd_level;
+    // STATUS
+    const status = document.querySelector('#status');
+    status.textContent = data.list[0].weather[0].description;
+    const statusIcon = document.querySelector('#statusIcon');
+    statusIcon.src = `http://openweathermap.org/img/w/${data.list[0].weather[0].icon}.png`;
+    statusIcon.alt = `${data.list[0].weather[0].description} icon`;
+    statusIcon.title = data.list[0].weather[0].description;
 
     // Print FORECAST [1-39]
 

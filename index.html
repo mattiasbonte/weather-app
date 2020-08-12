@@ -78,7 +78,7 @@
           <!-- TEMP -->
           <div
             id="temp"
-            class="col-start-3 col-end-5 row-start-1 row-end-3 p-2 font-bold transform translate-x-3 translate-y-6 sm:text-6xl"
+            class="col-start-3 col-end-5 row-start-2 p-0 text-5xl font-bold transform -translate-y-4 sm:-translate-y-6 sm:text-6xl"
           >
             XX°
           </div>
@@ -96,56 +96,48 @@
             <p class="text-xs text-gray-300">max</p>
             <p id="max">XX°</p>
           </div>
-
-          <!-- STATUS -->
+          <!-- FEELS -->
           <div
             class="self-start col-start-5 col-end-7 row-start-1 bg-indigo-800 border border-gray-600 rounded-lg shadow"
           >
-            <p id="status" class="text-white">XXX</p>
-            <span class="text-xs text-gray-400">&nbsp feels</span>
-            <span id="feels">XX°</span>
+            <p class="text-xs text-gray-300">feels like</p>
+            <p id="feels">XX°</p>
           </div>
-
           <!-- TIME & CITY -->
-          <div
-            class="self-start col-start-1 col-end-3 row-start-2 transform -translate-y-4"
-          >
-            <p id="thisTime" class="text-3xl font-bold">HH:MM</p>
-            <p id="thisCity" class="text-lg font-bold">City</p>
+          <div class="col-start-1 col-end-3 row-start-2">
+            <p id="thisTime" class="text-xl font-bold sm:text-4xl">HH:MM</p>
+            <p id="thisCity" class="text-sm font-bold sm:text-2xl">City</p>
           </div>
-
           <!-- RAIN & CLOUD PROB -->
-          <div class="col-start-5 row-start-2 text-xs transform -translate-y-4">
+          <div class="col-start-5 row-start-2 text-xs">
             <p class="text-gray-600">rain</p>
             <p id="probRain" class="text-lg">
               XX
             </p>
             <span class="text-xs text-gray-500">%</span>
           </div>
-          <div class="col-start-6 row-start-2 text-xs transform -translate-y-4">
+          <div class="col-start-6 row-start-2 text-xs">
             <p class="text-gray-600">clouds</p>
             <p id="probCloud" class="text-lg">
               XX
             </p>
             <span class="text-xs text-gray-500">%</span>
           </div>
-
           <!-- HUMIDITY & VISIBILITY -->
           <div
-            class="self-end col-start-1 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
+            class="col-start-1 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
           >
             <p class="text-gray-600">humid</p>
             <p id="humidity" class="text-base">XX</p>
             <p class="text-gray-500">%</p>
           </div>
           <div
-            class="self-end col-start-2 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
+            class="col-start-2 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
           >
             <p class="text-gray-600">sight</p>
             <p id="visibility" class="text-base">XX</p>
             <p class="text-gray-500">m</p>
           </div>
-
           <!-- WIND -->
           <div
             class="relative col-start-3 col-end-5 row-start-3 row-end-4 p-1 mx-auto text-white bg-gray-700 rounded-full shadow-md"
@@ -157,24 +149,19 @@
               alt="Wind rose icon pointing in wind direction"
             />
             <img
-              title="Wind Rose"
+              id="windDeg"
               src="images/forecast/windrose.svg"
-              class="absolute top-0 left-0 right-0 z-20 w-16 mx-auto duration-1000 ease-linear transform translate-y-1 rounded-full hover:rotate-180"
+              class="absolute top-0 left-0 right-0 z-20 w-16 mx-auto duration-1000 ease-linear transform translate-y-1 rounded-full"
               alt="Wind rose icon pointing in wind direction"
             />
-            <div
-              id="list.wind.speed"
-              class="absolute top-0 left-0 right-0 mx-auto transform translate-y-5"
-            >
-              <p class="z-30 text-lg">10</p>
+            <div class="absolute top-0 left-0 right-0 mx-auto transform translate-y-5">
+              <p id="windSpeed" class="z-30 text-lg">XX</p>
               <p class="z-30 text-xs text-gray-500 transform -translate-y-2">m/s</p>
             </div>
-            <!-- <p id="list.wind.deg">NNE</p> -->
           </div>
-
           <!-- PRESSURE -->
           <div
-            class="self-end col-start-5 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
+            class="col-start-5 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
           >
             <p class="text-gray-600">
               sea
@@ -185,7 +172,7 @@
             <p class="text-gray-500">hPa</p>
           </div>
           <div
-            class="self-end col-start-6 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
+            class="col-start-6 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
           >
             <p class="text-gray-600">
               land
@@ -196,11 +183,20 @@
             <p class="text-gray-500">hPa</p>
           </div>
         </div>
+        <!-- STATUS -->
+        <div class="text-center">
+          <div
+            class="z-10 max-w-xs p-2 px-10 mx-auto -m-3 text-center text-white bg-gray-800 rounded-b-full shadow-md"
+          >
+            <span id="status">XXX</span>
+            <img id="statusIcon" class="inline w-8" src="" alt="" title="" />
+          </div>
+        </div>
 
         <!-- FORECAST -->
         <div
           id="forecast"
-          class="flex flex-wrap justify-start p-4 mt-3 text-xs text-center text-white bg-gray-800 rounded-lg shadow-md"
+          class="flex flex-wrap justify-start p-4 mt-6 text-xs text-center text-white bg-gray-800 rounded-lg shadow-md"
         >
           <!-- 3H INTERVAL #1 -->
           <div
