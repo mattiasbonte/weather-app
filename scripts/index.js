@@ -20,9 +20,10 @@
   // Handle submit click button
   document.querySelector('#submit').onclick = () => {
     animInputDiv();
+    const country = 'BE';
     const city = document.querySelector('input').value;
     const weather = getWeather(city).catch(error);
-    getWeather(city).catch(error);
+    getWeather(city, country).catch(error);
     printTemp(weather);
   };
 
@@ -123,9 +124,9 @@
   // ========== //
   // FETCH DATA //
   // ========== //
-  async function getWeather(city) {
+  async function getWeather(city, country) {
     const apiKey = '16b8985dd4d01e5dda0af6d392345499';
-    const countryCode = 'BE';
+    const countryCode = country;
     const weatherCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city},${countryCode}&appid=${apiKey}`;
     // this gets the data from every 3 hours for the next 5 days, (24/3)*5= 40 data points
     const response = await fetch(weatherCall);
@@ -289,7 +290,7 @@
     const statusIcon = document.querySelector('#statusIcon');
     const description = data.list[0].weather[0].description;
     status.textContent = description;
-    statusIcon.src = `http://openweathermap.org/img/w/${icon}.png`;
+    statusIcon.src = `https://openweathermap.org/img/w/${icon}.png`;
     statusIcon.alt = `${description} icon`;
     statusIcon.title = `${description} in ${cityName}`;
 
@@ -364,7 +365,7 @@
       // Get Weather Icon
       const description = interval.weather[0].description;
       const icon = interval.weather[0].icon;
-      const source = `http://openweathermap.org/img/w/${icon}.png`;
+      const source = `https://openweathermap.org/img/w/${icon}.png`;
 
       // Print Segments Per Time Interval
       const segment = `
