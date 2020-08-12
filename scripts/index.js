@@ -53,6 +53,39 @@
     });
   }
 
+  // WIND directional notation (N,NNE,NE...)
+  function windDir(windDegree) {
+    let deg = [0];
+    for (let i = 0; i < 16; i++) {
+      deg.push(i * 22.5 + 11.25);
+    }
+    const direction = [
+      'N',
+      'NNE',
+      'NE',
+      'ENE',
+      'E',
+      'ESE',
+      'SE',
+      'SSE',
+      'S',
+      'SSW',
+      'SW',
+      'WSW',
+      'W',
+      'WNW',
+      'NW',
+      'NNW',
+    ];
+    let windDir;
+    for (let i = 0; i < deg.length; i++) {
+      if (windDegree >= deg[i] && windDegree <= deg[i + 1]) {
+        windDir = direction[i];
+      }
+    }
+    return windDir;
+  }
+
   // ANIMATION & SOUND
   // Input Div
   function animInputDiv() {
@@ -95,16 +128,22 @@
     // Print CURRENT [0]
     // TEMPS
     const temp = document.querySelector('#temp');
-    temp.textContent = `${(data.list[0].main.temp - 273).toFixed(0)}°`;
+    const currentTemp = `${(data.list[0].main.temp - 273).toFixed(0)}°`;
+    temp.textContent = currentTemp;
+    temp.title = `It's currently ${currentTemp} Celsius in ${data.city.name}`;
     const min = document.querySelector('#min');
-    min.textContent = `${(data.list[0].main.temp_min - 273).toFixed(0)}°`;
+    const minTemp = `${(data.list[0].main.temp_min - 273).toFixed(0)}°`;
+    min.textContent = minTemp;
+    min.title = `It will be minimum ${minTemp} Celsius in ${data.city.name}`;
     const max = document.querySelector('#max');
-    max.textContent = `${(data.list[0].main.temp_max - 273).toFixed(0)}°`;
+    const maxTemp = `${(data.list[0].main.temp_max - 273).toFixed(0)}°`;
+    max.textContent = maxTemp;
+    max.title = `It will be maximum ${maxTemp} Celsius in ${data.city.name}`;
     // FEELS
     const feels = document.querySelector('#feels');
     const feelsTemp = `${(data.list[0].main.feels_like - 273).toFixed(0)}°`;
     feels.textContent = feelsTemp;
-    feels.title = `It feels like it's ${feelsTemp} outside`;
+    feels.title = `It feels like ${feelsTemp} Celsius in ${data.city.name}`;
     // TIME
     const thisTime = document.querySelector('#thisTime');
     const date = new Date();
@@ -123,11 +162,11 @@
     // Probability CLOUDS
     const probCloud = document.querySelector('#probCloud');
     probCloud.textContent = data.list[0].clouds.all;
-    probCloud.title = `${data.list[0].clouds.all}% of the sky in ${data.city.name} is covered with clouds`;
+    probCloud.title = `${data.list[0].clouds.all}% of the sky in ${data.city.name} is covered by clouds`;
     // HUMIDITY
     const humidity = document.querySelector('#humidity');
     humidity.textContent = data.list[0].main.humidity;
-    // VISIBILITY in meters
+    // VISIBILITY
     const visibility = document.querySelector('#visibility');
     const sight = data.list[0].visibility;
     sight > 900 ? (visibility.textContent = '+900') : (visibility.textContent = sight);
@@ -136,15 +175,19 @@
     const windSpeed = document.querySelector('#windSpeed');
     windSpeed.textContent = data.list[0].wind.speed.toFixed(0);
     const windDeg = document.querySelector('#windDeg');
-    windDeg.style.transform = `rotate(${data.list[0].wind.deg}deg)`;
-    windDeg.title = `The wind is blowing at ${data.list[0].wind.speed.toFixed(0)}m/s in ${
+    const windDegree = data.list[0].wind.deg;
+    windDeg.style.transform = `rotate(${windDegree}deg)`;
+    const windPos = windDir(windDegree);
+    windDeg.title = `The wind in ${
       data.city.name
-    }`;
+    } is blowing to ${windPos} at ${data.list[0].wind.speed.toFixed(0)}m/s `;
     // PRESSURES
     const sea = document.querySelector('#presSea');
     sea.textContent = data.list[0].main.sea_level;
+    sea.title = `Atmospheric pressure on the sea level is ${data.list[0].main.sea_level} hPa`;
     const land = document.querySelector('#presLand');
     land.textContent = data.list[0].main.grnd_level;
+    land.title = `Atmospheric pressure on the land level is ${data.list[0].main.grnd_level} hPa`;
     // STATUS
     const status = document.querySelector('#status');
     status.textContent = data.list[0].weather[0].description;
@@ -153,14 +196,10 @@
     statusIcon.alt = `${data.list[0].weather[0].description} icon`;
     statusIcon.title = data.list[0].weather[0].description;
 
+    //
     // Print FORECAST [1-39]
 
     console.log('data :>> ', data);
-    /* console.log(data.city.name, 'print city name');
-    console.log('data.list.dt :>> ', data.list[0].dt);
-    console.log('data.list.temp :>> ', data.list[0].main.temp);
-    console.log('data.list.main.temp_min :>> ', data.list[0].main.temp_min);
-    console.log('data.list.main.temp_max :>> ', data.list[0].main.temp_max); */
   }
 
   // TODO: Fetch weather of next 5 days
