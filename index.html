@@ -34,170 +34,349 @@
   <body class="container box-border p-2 mx-auto prose bg-gray-300">
     <header class="m-5 font-bold text-center text-gray-500">Weather App</header>
 
-    <nav class=""></nav>
+    <nav class="">
+      <div id="controlsDiv" class="flex justify-center mb-5">
+        <p>compare &nbsp;</p>
+        <input
+          id="compareCheck"
+          class="hidden lg:block"
+          type="checkbox"
+          title="Compare 2 cities next to one another!"
+        />
+      </div>
+    </nav>
 
     <main class="">
-      <div
-        id="inputDiv"
-        class="max-w-sm p-5 mx-auto mb-16 text-center bg-gray-100 border rounded-lg shadow-md sm:mb-32 hover:shadow-lg"
-      >
+      <!-- COMPARE LEFT PANEL -->
+      <div id="compareLeft">
         <div
-          class="flex flex-wrap items-center justify-between py-2 border-b border-teal-500"
+          id="inputDivLeft"
+          class="max-w-sm p-5 mx-auto mb-16 text-center bg-gray-100 border rounded-lg shadow-md sm:mb-32 hover:shadow-lg"
         >
-          <input
-            id="input"
-            class="w-40 px-2 py-1 leading-tight text-gray-700 bg-transparent border-none appearance-none focus:outline-none"
-            type="text"
-            placeholder="City"
-            aria-label="City"
-          />
-          <button
-            id="submit"
-            class="px-2 py-1 text-sm text-white bg-teal-500 border-4 border-teal-500 rounded hover:bg-teal-700 hover:border-teal-700"
-            type="button"
+          <div
+            class="flex flex-wrap items-center justify-between py-2 border-b border-teal-500"
           >
-            Go
-          </button>
+            <input
+              id="inputLeft"
+              class="w-40 px-2 py-1 leading-tight text-gray-700 bg-transparent border-none appearance-none focus:outline-none"
+              type="text"
+              placeholder="City"
+              aria-label="City"
+            />
+            <button
+              id="submitLeft"
+              class="px-2 py-1 text-sm text-white bg-teal-500 border-4 border-teal-500 rounded hover:bg-teal-700 hover:border-teal-700"
+              type="button"
+            >
+              Go
+            </button>
+          </div>
+        </div>
+
+        <div id="weatherBoxLeft" class="relative hidden my-3">
+          <!-- WEATHER ICON -->
+          <img
+            id="weatherIconLeft"
+            class="absolute left-0 right-0 z-20 w-24 p-2 mx-auto transition duration-700 transform -translate-y-12 bg-gray-300 rounded-b-full sm:-translate-y-24 sm:w-40 easy-linear hover:scale-110"
+            src="images/forecast/sun.svg"
+            alt="Current weather state icon"
+          />
+
+          <!-- CURRENT -->
+          <div
+            id="current"
+            class="grid items-center max-w-xl grid-cols-6 grid-rows-3 gap-2 p-4 mx-auto text-center text-white bg-gray-800 rounded-lg shadow-lg"
+          >
+            <!-- TEMP -->
+            <div
+              id="tempLeft"
+              class="col-start-3 col-end-5 row-start-2 p-0 text-5xl font-bold transform -translate-y-4 sm:-translate-y-6 sm:text-6xl"
+            >
+              XX°
+            </div>
+            <!-- MIN -->
+            <div
+              class="self-start col-start-1 row-start-1 bg-blue-500 border border-white rounded-l-lg shadow"
+            >
+              <p class="text-xs text-gray-300">min</p>
+              <p id="minLeft">XX°</p>
+            </div>
+            <!-- MAX -->
+            <div
+              class="self-start col-start-2 row-start-1 bg-red-500 border border-white rounded-r-lg shadow"
+            >
+              <p class="text-xs text-gray-300">max</p>
+              <p id="maxLeft">XX°</p>
+            </div>
+            <!-- FEELS -->
+            <div
+              class="self-start col-start-5 col-end-7 row-start-1 bg-indigo-800 border border-gray-600 rounded-lg shadow"
+            >
+              <p class="text-xs text-gray-300">feels like</p>
+              <p id="feelsLeft">XX°</p>
+            </div>
+            <!-- TIME & CITY -->
+            <div class="col-start-1 col-end-3 row-start-2">
+              <p id="thisTimeLeft" class="text-xl font-bold sm:text-4xl">HH:MM</p>
+              <p id="thisCityLeft" class="text-sm font-bold sm:text-2xl">City</p>
+            </div>
+            <!-- RAIN & CLOUD PROB -->
+            <div class="col-start-5 row-start-2 text-xs">
+              <p class="text-gray-600">rain</p>
+              <p id="probRainLeft" class="text-lg">
+                XX
+              </p>
+              <span class="text-xs text-gray-500">%</span>
+            </div>
+            <div class="col-start-6 row-start-2 text-xs">
+              <p class="text-gray-600">clouds</p>
+              <p id="probCloudLeft" class="text-lg">
+                XX
+              </p>
+              <span class="text-xs text-gray-500">%</span>
+            </div>
+            <!-- HUMIDITY & VISIBILITY -->
+            <div
+              class="col-start-1 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
+            >
+              <p class="text-gray-600">humid</p>
+              <p id="humidityLeft" class="text-base">XX</p>
+              <p class="text-gray-500">%</p>
+            </div>
+            <div
+              class="col-start-2 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
+            >
+              <p class="text-gray-600">sight</p>
+              <p id="visibilityLeft" class="text-base">XX</p>
+              <p class="text-gray-500">m</p>
+            </div>
+            <!-- WIND -->
+            <div
+              class="relative col-start-3 col-end-5 row-start-3 row-end-4 p-1 mx-auto text-white bg-gray-700 rounded-full shadow-md"
+            >
+              <img
+                title="N E S W"
+                src="images/forecast/nesw.svg"
+                class="z-10 w-16 mx-auto rounded-full"
+                alt="Wind rose icon pointing in wind direction"
+              />
+              <img
+                id="windDegLeft"
+                src="images/forecast/windrose.svg"
+                class="absolute top-0 left-0 right-0 z-20 w-16 mx-auto duration-1000 ease-linear transform translate-y-1 rounded-full"
+                alt="Wind rose icon pointing in wind direction"
+              />
+              <div class="absolute top-0 left-0 right-0 mx-auto transform translate-y-5">
+                <p id="windSpeedLeft" class="z-30 text-lg">XX</p>
+                <p class="z-30 text-xs text-gray-500 transform -translate-y-2">m/s</p>
+              </div>
+            </div>
+            <!-- PRESSURE -->
+            <div
+              class="col-start-5 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
+            >
+              <p class="text-gray-600">
+                sea
+              </p>
+              <p id="presSeaLeft" class="text-base">
+                XX
+              </p>
+              <p class="text-gray-500">hPa</p>
+            </div>
+            <div
+              class="col-start-6 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
+            >
+              <p class="text-gray-600">
+                land
+              </p>
+              <p id="presLandLeft" class="text-base">
+                XX
+              </p>
+              <p class="text-gray-500">hPa</p>
+            </div>
+          </div>
+          <!-- STATUS -->
+          <div class="text-center">
+            <div
+              class="z-10 max-w-xs p-2 px-10 mx-auto -m-3 text-center text-white bg-gray-800 rounded-b-full shadow-md"
+            >
+              <span id="statusLeft">XXX</span>
+              <img id="statusIconLeft" class="inline w-8" src="" alt="" title="" />
+            </div>
+          </div>
+
+          <!-- FORECAST -->
+          <div
+            id="forecastLeft"
+            class="flex flex-wrap justify-between max-w-xl p-4 mx-auto mt-6 text-xs text-center text-white bg-gray-800 rounded-lg shadow-md"
+          ></div>
         </div>
       </div>
 
-      <div id="weatherBox" class="relative hidden my-3">
-        <!-- WEATHER ICON -->
-        <img
-          id="weatherIcon"
-          class="absolute left-0 right-0 z-20 w-24 p-2 mx-auto transition duration-700 transform -translate-y-12 bg-gray-300 rounded-b-full sm:-translate-y-24 sm:w-40 easy-linear hover:scale-110"
-          src="images/forecast/sun.svg"
-          alt="Current weather state icon"
-        />
-
-        <!-- CURRENT -->
+      <!-- COMPARE RIGHT PANEL -->
+      <div id="compareRight" class="hidden">
         <div
-          id="current"
-          class="grid items-center max-w-xl grid-cols-6 grid-rows-3 gap-2 p-4 mx-auto text-center text-white bg-gray-800 rounded-lg shadow-lg"
+          id="inputDivRight"
+          class="max-w-sm p-5 mx-auto mb-16 text-center bg-gray-100 border rounded-lg shadow-md sm:mb-32 hover:shadow-lg"
         >
-          <!-- TEMP -->
           <div
-            id="temp"
-            class="col-start-3 col-end-5 row-start-2 p-0 text-5xl font-bold transform -translate-y-4 sm:-translate-y-6 sm:text-6xl"
+            class="flex flex-wrap items-center justify-between py-2 border-b border-teal-500"
           >
-            XX°
-          </div>
-          <!-- MIN -->
-          <div
-            class="self-start col-start-1 row-start-1 bg-blue-500 border border-white rounded-l-lg shadow"
-          >
-            <p class="text-xs text-gray-300">min</p>
-            <p id="min">XX°</p>
-          </div>
-          <!-- MAX -->
-          <div
-            class="self-start col-start-2 row-start-1 bg-red-500 border border-white rounded-r-lg shadow"
-          >
-            <p class="text-xs text-gray-300">max</p>
-            <p id="max">XX°</p>
-          </div>
-          <!-- FEELS -->
-          <div
-            class="self-start col-start-5 col-end-7 row-start-1 bg-indigo-800 border border-gray-600 rounded-lg shadow"
-          >
-            <p class="text-xs text-gray-300">feels like</p>
-            <p id="feels">XX°</p>
-          </div>
-          <!-- TIME & CITY -->
-          <div class="col-start-1 col-end-3 row-start-2">
-            <p id="thisTime" class="text-xl font-bold sm:text-4xl">HH:MM</p>
-            <p id="thisCity" class="text-sm font-bold sm:text-2xl">City</p>
-          </div>
-          <!-- RAIN & CLOUD PROB -->
-          <div class="col-start-5 row-start-2 text-xs">
-            <p class="text-gray-600">rain</p>
-            <p id="probRain" class="text-lg">
-              XX
-            </p>
-            <span class="text-xs text-gray-500">%</span>
-          </div>
-          <div class="col-start-6 row-start-2 text-xs">
-            <p class="text-gray-600">clouds</p>
-            <p id="probCloud" class="text-lg">
-              XX
-            </p>
-            <span class="text-xs text-gray-500">%</span>
-          </div>
-          <!-- HUMIDITY & VISIBILITY -->
-          <div
-            class="col-start-1 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
-          >
-            <p class="text-gray-600">humid</p>
-            <p id="humidity" class="text-base">XX</p>
-            <p class="text-gray-500">%</p>
-          </div>
-          <div
-            class="col-start-2 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
-          >
-            <p class="text-gray-600">sight</p>
-            <p id="visibility" class="text-base">XX</p>
-            <p class="text-gray-500">m</p>
-          </div>
-          <!-- WIND -->
-          <div
-            class="relative col-start-3 col-end-5 row-start-3 row-end-4 p-1 mx-auto text-white bg-gray-700 rounded-full shadow-md"
-          >
-            <img
-              title="N E S W"
-              src="images/forecast/nesw.svg"
-              class="z-10 w-16 mx-auto rounded-full"
-              alt="Wind rose icon pointing in wind direction"
+            <input
+              id="inputRight"
+              class="w-40 px-2 py-1 leading-tight text-gray-700 bg-transparent border-none appearance-none focus:outline-none"
+              type="text"
+              placeholder="City"
+              aria-label="City"
             />
-            <img
-              id="windDeg"
-              src="images/forecast/windrose.svg"
-              class="absolute top-0 left-0 right-0 z-20 w-16 mx-auto duration-1000 ease-linear transform translate-y-1 rounded-full"
-              alt="Wind rose icon pointing in wind direction"
-            />
-            <div class="absolute top-0 left-0 right-0 mx-auto transform translate-y-5">
-              <p id="windSpeed" class="z-30 text-lg">XX</p>
-              <p class="z-30 text-xs text-gray-500 transform -translate-y-2">m/s</p>
+            <button
+              id="submitRight"
+              class="px-2 py-1 text-sm text-white bg-teal-500 border-4 border-teal-500 rounded hover:bg-teal-700 hover:border-teal-700"
+              type="button"
+            >
+              Go
+            </button>
+          </div>
+        </div>
+
+        <div id="weatherBoxRight" class="relative hidden my-3">
+          <!-- WEATHER ICON -->
+          <img
+            id="weatherIconRight"
+            class="absolute left-0 right-0 z-20 w-24 p-2 mx-auto transition duration-700 transform -translate-y-12 bg-gray-300 rounded-b-full sm:-translate-y-24 sm:w-40 easy-linear hover:scale-110"
+            src="images/forecast/sun.svg"
+            alt="Current weather state icon"
+          />
+
+          <!-- CURRENT -->
+          <div
+            id="current"
+            class="grid items-center max-w-xl grid-cols-6 grid-rows-3 gap-2 p-4 mx-auto text-center text-white bg-gray-800 rounded-lg shadow-lg"
+          >
+            <!-- TEMP -->
+            <div
+              id="tempRight"
+              class="col-start-3 col-end-5 row-start-2 p-0 text-5xl font-bold transform -translate-y-4 sm:-translate-y-6 sm:text-6xl"
+            >
+              XX°
+            </div>
+            <!-- MIN -->
+            <div
+              class="self-start col-start-1 row-start-1 bg-blue-500 border border-white rounded-l-lg shadow"
+            >
+              <p class="text-xs text-gray-300">min</p>
+              <p id="minRight">XX°</p>
+            </div>
+            <!-- MAX -->
+            <div
+              class="self-start col-start-2 row-start-1 bg-red-500 border border-white rounded-r-lg shadow"
+            >
+              <p class="text-xs text-gray-300">max</p>
+              <p id="maxRight">XX°</p>
+            </div>
+            <!-- FEELS -->
+            <div
+              class="self-start col-start-5 col-end-7 row-start-1 bg-indigo-800 border border-gray-600 rounded-lg shadow"
+            >
+              <p class="text-xs text-gray-300">feels like</p>
+              <p id="feelsRight">XX°</p>
+            </div>
+            <!-- TIME & CITY -->
+            <div class="col-start-1 col-end-3 row-start-2">
+              <p id="thisTimeRight" class="text-xl font-bold sm:text-4xl">HH:MM</p>
+              <p id="thisCityRight" class="text-sm font-bold sm:text-2xl">City</p>
+            </div>
+            <!-- RAIN & CLOUD PROB -->
+            <div class="col-start-5 row-start-2 text-xs">
+              <p class="text-gray-600">rain</p>
+              <p id="probRainRight" class="text-lg">
+                XX
+              </p>
+              <span class="text-xs text-gray-500">%</span>
+            </div>
+            <div class="col-start-6 row-start-2 text-xs">
+              <p class="text-gray-600">clouds</p>
+              <p id="probCloudRight" class="text-lg">
+                XX
+              </p>
+              <span class="text-xs text-gray-500">%</span>
+            </div>
+            <!-- HUMIDITY & VISIBILITY -->
+            <div
+              class="col-start-1 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
+            >
+              <p class="text-gray-600">humid</p>
+              <p id="humidityRight" class="text-base">XX</p>
+              <p class="text-gray-500">%</p>
+            </div>
+            <div
+              class="col-start-2 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
+            >
+              <p class="text-gray-600">sight</p>
+              <p id="visibilityRight" class="text-base">XX</p>
+              <p class="text-gray-500">m</p>
+            </div>
+            <!-- WIND -->
+            <div
+              class="relative col-start-3 col-end-5 row-start-3 row-end-4 p-1 mx-auto text-white bg-gray-700 rounded-full shadow-md"
+            >
+              <img
+                title="N E S W"
+                src="images/forecast/nesw.svg"
+                class="z-10 w-16 mx-auto rounded-full"
+                alt="Wind rose icon pointing in wind direction"
+              />
+              <img
+                id="windDegRight"
+                src="images/forecast/windrose.svg"
+                class="absolute top-0 left-0 right-0 z-20 w-16 mx-auto duration-1000 ease-linear transform translate-y-1 rounded-full"
+                alt="Wind rose icon pointing in wind direction"
+              />
+              <div class="absolute top-0 left-0 right-0 mx-auto transform translate-y-5">
+                <p id="windSpeedRight" class="z-30 text-lg">XX</p>
+                <p class="z-30 text-xs text-gray-500 transform -translate-y-2">m/s</p>
+              </div>
+            </div>
+            <!-- PRESSURE -->
+            <div
+              class="col-start-5 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
+            >
+              <p class="text-gray-600">
+                sea
+              </p>
+              <p id="presSeaRight" class="text-base">
+                XX
+              </p>
+              <p class="text-gray-500">hPa</p>
+            </div>
+            <div
+              class="col-start-6 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
+            >
+              <p class="text-gray-600">
+                land
+              </p>
+              <p id="presLandRight" class="text-base">
+                XX
+              </p>
+              <p class="text-gray-500">hPa</p>
             </div>
           </div>
-          <!-- PRESSURE -->
-          <div
-            class="col-start-5 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
-          >
-            <p class="text-gray-600">
-              sea
-            </p>
-            <p id="presSea" class="text-base">
-              XX
-            </p>
-            <p class="text-gray-500">hPa</p>
+          <!-- STATUS -->
+          <div class="text-center">
+            <div
+              class="z-10 max-w-xs p-2 px-10 mx-auto -m-3 text-center text-white bg-gray-800 rounded-b-full shadow-md"
+            >
+              <span id="statusRight">XXX</span>
+              <img id="statusIconRight" class="inline w-8" src="" alt="" title="" />
+            </div>
           </div>
-          <div
-            class="col-start-6 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
-          >
-            <p class="text-gray-600">
-              land
-            </p>
-            <p id="presLand" class="text-base">
-              XX
-            </p>
-            <p class="text-gray-500">hPa</p>
-          </div>
-        </div>
-        <!-- STATUS -->
-        <div class="text-center">
-          <div
-            class="z-10 max-w-xs p-2 px-10 mx-auto -m-3 text-center text-white bg-gray-800 rounded-b-full shadow-md"
-          >
-            <span id="status">XXX</span>
-            <img id="statusIcon" class="inline w-8" src="" alt="" title="" />
-          </div>
-        </div>
 
-        <!-- FORECAST -->
-        <div
-          id="forecast"
-          class="flex flex-wrap justify-between max-w-xl p-4 mx-auto mt-6 text-xs text-center text-white bg-gray-800 rounded-lg shadow-md"
-        ></div>
+          <!-- FORECAST -->
+          <div
+            id="forecastRight"
+            class="flex flex-wrap justify-between max-w-xl p-4 mx-auto mt-6 text-xs text-center text-white bg-gray-800 rounded-lg shadow-md"
+          ></div>
+        </div>
       </div>
     </main>
 

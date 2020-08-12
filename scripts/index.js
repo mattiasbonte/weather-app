@@ -2,11 +2,19 @@
   //---------//
   // ON LOAD //
   //---------//
-  // User can press enter to submit input
+  // User can press enter to submit both inputs
   pushEnter();
+
+  // Uncheck check boxes
+  const compareCheck = document.querySelector('#compareCheck');
+  compareCheck.checked = false;
+
   // Check previous city, if set, add to input field
-  if (localStorage.getItem('Previous City') !== null) {
-    getCity();
+  if (localStorage.getItem('Prev City Left') !== null) {
+    getCity('#inputLeft');
+  }
+  if (localStorage.getItem('Prev City Right') !== null) {
+    getCity('#inputRight');
   }
 
   //---------//
@@ -14,32 +22,46 @@
   //---------//
   // TODO: Autocomplete.js the city.list.json
 
-  //--------//
-  // SUBMIT //
-  //--------//
-  // Handle submit click button
-  document.querySelector('#submit').onclick = () => {
-    animInputDiv();
+  //----------//
+  // HANDLERS //
+  //----------//
+  // Handle LEFT submit button
+  document.querySelector('#submitLeft').onclick = () => {
+    animInput('#inputDivLeft');
     const country = 'BE';
-    const city = document.querySelector('input').value;
+    const city = document.querySelector('#inputLeft').value;
     const weather = getWeather(city).catch(error);
     getWeather(city, country).catch(error);
-    printTemp(weather);
+    printTemp(weather, 'Left');
+  };
+  // Handle RIGHT submit button
+  document.querySelector('#submitRight').onclick = () => {
+    animInput('#inputDivRight');
+    const country = 'BE';
+    const city = document.querySelector('#inputRight').value;
+    const weather = getWeather(city).catch(error);
+    getWeather(city, country).catch(error);
+    printTemp(weather, 'Right');
+  };
+  // Compare ON/OFF
+  let compClick;
+  document.querySelector('#compareCheck').onclick = () => {
+    animCompare();
   };
 
   //-----------//
   // FUNCTIONS //
   //-----------//
   // Save/Update submitted city in local storage
-  function getCity() {
+  function getCity(id) {
     if (localStorage.getItem('Previous City') !== null) {
       const city = localStorage.getItem('Previous City').toString();
-      document.querySelector('#input').value = city;
+      document.querySelector(id).value = city;
     }
   }
   // Get previous city from local storage
-  function setCity(city) {
-    localStorage.setItem('Previous City', city);
+  function setCity(city, id) {
+    localStorage.setItem(`Prev City ${id}`, city);
   }
   // Handle enter key push
   function pushEnter() {
@@ -48,7 +70,8 @@
       // Number 13 is the "Enter" key on the keyboard
       if (enter.keyCode === 13) {
         enter.preventDefault();
-        document.querySelector('#submit').click();
+        document.querySelector('#submitLeft').click();
+        document.querySelector('#submitRight').click();
       }
     });
   }
@@ -88,14 +111,14 @@
 
   // ANIMATION & SOUND
   // Input Div
-  function animInputDiv() {
+  function animInput(id) {
     // Sound
     const audio = new Audio('audio/tick.mp3');
     audio.play();
     // Animate
-    document.querySelector('#inputDiv').classList.add('animate-bounce');
+    document.querySelector(id).classList.add('animate-bounce');
     const timeout = setTimeout(() => {
-      document.querySelector('#inputDiv').classList.remove('animate-bounce');
+      document.querySelector(id).classList.remove('animate-bounce');
       clearTimeout(timeout);
     }, 1520);
   }
@@ -103,21 +126,21 @@
   // Compare Button
   function animCompare() {
     // audio
-    const audioWhoop = new Audio('../audio/whoop.mp3');
+    const audioWhoop = new Audio('audio/whoop.mp3');
     audioWhoop.play();
     // Open/Close compareDiv on click
-    const compareDiv = document.querySelector('#compareDiv');
-    let compClick = 1;
-    // TODO: NEED TO FIND A WAY TO ACCESS A GRID
+    const main = document.querySelector('main');
+    const compareRight = document.querySelector('#compareRight');
+    const compareCheck = document.querySelector('#compareCheck');
 
-    if (compClick === 1) {
-      /* gameInfo.classList.remove('hidden');
-      gameInfo.classList.add('flex'); */
-      compClick = 0;
+    if (compareCheck.checked) {
+      //on
+      main.classList.add('grid', 'grid-cols-2', 'gap-6');
+      compareRight.classList.remove('hidden');
     } else {
-      /* gameInfo.classList.remove('flex');
-      gameInfo.classList.add('hidden'); */
-      compClick = 1;
+      //off
+      main.classList.remove('grid', 'grid-cols-2', 'gap-6');
+      compareRight.classList.add('hidden');
     }
   }
 
@@ -140,20 +163,20 @@
   // ============= //
   // PRINTING HTML //
   // ============= //
-  async function printTemp(weather) {
+  async function printTemp(weather, id) {
     // Wait for Data from API
     const data = await weather;
 
     // City Name
     const cityName = data.city.name;
-    setCity(cityName);
+    setCity(cityName, id);
 
     // Show WeatherBox
-    const weatherBox = document.querySelector('#weatherBox').classList;
+    const weatherBox = document.querySelector(`#weatherBox${id}`).classList;
     weatherBox.remove('hidden');
 
     // WEATHER ICON SWAP
-    const weatherIcon = document.querySelector('#weatherIcon');
+    const weatherIcon = document.querySelector(`#weatherIcon${id}`);
     const icon = data.list[0].weather[0].icon;
     const src = 'images/status/';
     switch (icon) {
@@ -218,11 +241,11 @@
 
     // Print CURRENT [0] //
     // TEMPS
-    const temp = document.querySelector('#temp');
+    const temp = document.querySelector(`#temp${id}`);
     const currentTemp = `${(data.list[0].main.temp - 273).toFixed(0)}°`;
-    const min = document.querySelector('#min');
+    const min = document.querySelector(`#min${id}`);
     const minTemp = `${(data.list[0].main.temp_min - 273).toFixed(0)}°`;
-    const max = document.querySelector('#max');
+    const max = document.querySelector(`#max${id}`);
     const maxTemp = `${(data.list[0].main.temp_max - 273).toFixed(0)}°`;
     temp.textContent = currentTemp;
     min.textContent = minTemp;
@@ -231,45 +254,46 @@
     min.title = `It will be minimum ${minTemp} Celsius in ${cityName}`;
     max.title = `It will be maximum ${maxTemp} Celsius in ${cityName}`;
     // FEELS
-    const feels = document.querySelector('#feels');
+    const feels = document.querySelector(`#feels${id}`);
     const feelsTemp = `${(data.list[0].main.feels_like - 273).toFixed(0)}°`;
     feels.textContent = feelsTemp;
     feels.title = `It feels like ${feelsTemp} Celsius in ${cityName}`;
     // TIME
-    const thisTime = document.querySelector('#thisTime');
+    const thisTime = document.querySelector(`#thisTime${id}`);
     const date = new Date();
     const day = date.getDate();
-    const hours = date.getHours();
+    let hours = date.getHours();
     let minutes = date.getMinutes();
     minutes < 10 ? (minutes = `0${minutes}`) : '';
+    hours < 10 ? (hours = `0${hours}`) : '';
     thisTime.textContent = `${hours}:${minutes}`;
     // CITY
-    const thisCity = document.querySelector('#thisCity');
+    const thisCity = document.querySelector(`#thisCity${id}`);
     thisCity.textContent = cityName;
     // Probability RAIN
-    const probRain = document.querySelector('#probRain');
+    const probRain = document.querySelector(`#probRain${id}`);
     probRain.textContent = data.list[0].pop * 100;
     probRain.title = `There is a ${
       data.list[0].pop * 100
     }% chance of rain in ${cityName}`;
     // Probability CLOUDS
-    const probCloud = document.querySelector('#probCloud');
+    const probCloud = document.querySelector(`#probCloud${id}`);
     const probCld = data.list[0].clouds.all;
     probCloud.textContent = probCld;
     probCloud.title = `${probCld}% of the sky in ${cityName} is covered by clouds`;
     // HUMIDITY
-    const humidity = document.querySelector('#humidity');
+    const humidity = document.querySelector(`#humidity${id}`);
     const humid = data.list[0].main.humidity;
     humidity.textContent = humid;
     humidity.title = `There is ${humid}% humidity in the air in ${cityName}`;
     // VISIBILITY
-    const visibility = document.querySelector('#visibility');
+    const visibility = document.querySelector(`#visibility${id}`);
     const sight = data.list[0].visibility;
     sight > 900 ? (visibility.textContent = '+900') : (visibility.textContent = sight);
     visibility.title = `It's possible to see ${sight} meters far in ${cityName}`;
     // WIND
-    const windSpeed = document.querySelector('#windSpeed');
-    const windDeg = document.querySelector('#windDeg');
+    const windSpeed = document.querySelector(`#windSpeed${id}`);
+    const windDeg = document.querySelector(`#windDeg${id}`);
     const windSpd = data.list[0].wind.speed.toFixed(0);
     const windDegree = data.list[0].wind.deg;
     const windPos = windDir(windDegree);
@@ -277,17 +301,17 @@
     windDeg.style.transform = `rotate(${windDegree}deg)`;
     windDeg.title = `The wind in ${cityName} is blowing to ${windPos} at ${windSpd}m/s `;
     // PRESSURES
-    const sea = document.querySelector('#presSea');
+    const sea = document.querySelector(`#presSea${id}`);
     const seaPress = data.list[0].main.sea_level;
-    const land = document.querySelector('#presLand');
+    const land = document.querySelector(`#presLand${id}`);
     const landPress = data.list[0].main.grnd_level;
     sea.textContent = seaPress;
     land.textContent = landPress;
     sea.title = `Atmospheric pressure at sea level is ${seaPress} hPa`;
     land.title = `Atmospheric pressure at ${cityName}'s ground level is ${landPress} hPa`;
     // STATUS
-    const status = document.querySelector('#status');
-    const statusIcon = document.querySelector('#statusIcon');
+    const status = document.querySelector(`#status${id}`);
+    const statusIcon = document.querySelector(`#statusIcon${id}`);
     const description = data.list[0].weather[0].description;
     status.textContent = description;
     statusIcon.src = `https://openweathermap.org/img/w/${icon}.png`;
@@ -297,7 +321,7 @@
     // ===================== //
     // Print FORECAST [1-39] //
     // ===================== //
-    const forecast = document.querySelector('#forecast');
+    const forecast = document.querySelector(`#forecast${id}`);
     let forecastPrint = '';
     data.list.forEach((interval, i) => {
       // Get Date/Time
@@ -400,10 +424,6 @@
   // ======= //
   // COMPARE //
   // ======= //
-  /* document.querySelector('#compare').onclick = () => {
-    animCompare();
-    console.log('compared!!');
-  }; */
 
   // TODO: Give option to compare 2 cities
 
