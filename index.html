@@ -39,7 +39,7 @@
     <main class="">
       <div
         id="inputDiv"
-        class="max-w-sm p-5 mx-auto mb-16 text-center bg-gray-100 border rounded-lg shadow-md sm:mb-24 hover:shadow-lg"
+        class="max-w-sm p-5 mx-auto mb-16 text-center bg-gray-100 border rounded-lg shadow-md sm:mb-32 hover:shadow-lg"
       >
         <div
           class="flex flex-wrap items-center justify-between py-2 border-b border-teal-500"
@@ -64,40 +64,44 @@
       <div id="weatherBox" class="relative my-3">
         <!-- WEATHER ICON -->
         <img
-          class="absolute left-0 right-0 z-20 w-20 p-2 mx-auto transition duration-700 transform -translate-y-12 bg-gray-300 rounded-full sm:-translate-y-20 sm:w-32 easy-linear hover:scale-110"
+          class="absolute left-0 right-0 z-20 w-24 p-2 mx-auto transition duration-700 transform -translate-y-12 bg-gray-300 rounded-full sm:-translate-y-24 sm:w-40 easy-linear hover:scale-110"
           title="Weather state"
           src="images/forecast/sun.svg"
           alt="Current weather state icon"
         />
 
-        <!-- MOBILE BOX -->
+        <!-- MOBILE CURRENT -->
         <div
-          id="mobileBox"
-          class="grid items-center grid-cols-6 grid-rows-3 p-4 text-center bg-white border rounded-lg shadow-md"
+          id="currentWeather"
+          class="grid items-center grid-cols-6 grid-rows-3 gap-2 p-4 text-center text-white bg-gray-800 rounded-lg shadow-md"
         >
           <!-- MIN -->
           <div
-            class="self-start col-start-1 row-start-1 m-1 bg-blue-300 rounded-lg shadow"
+            class="self-start col-start-1 row-start-1 bg-blue-500 border border-white rounded-l-lg shadow"
           >
-            <p class="text-xs text-gray-600">min</p>
+            <p class="text-xs text-gray-400">min</p>
             <p id="list.main.temp_min">20°</p>
           </div>
           <!-- MAX -->
           <div
-            class="self-start col-start-2 row-start-1 m-1 text-white bg-red-300 rounded-lg shadow"
+            class="self-start col-start-2 row-start-1 bg-red-500 border border-white rounded-r-lg shadow"
           >
-            <p class="text-xs text-gray-600">max</p>
+            <p class="text-xs text-gray-400">max</p>
             <p id="list.main.temp_max">40°</p>
           </div>
 
           <!-- FEELS LIKE -->
-          <div class="self-start col-start-5 col-end-7 row-start-1 m-1 rounded-lg shadow">
+          <div
+            class="self-start col-start-5 col-end-7 row-start-1 bg-indigo-800 border border-gray-600 rounded-lg shadow"
+          >
             <p class="text-xs text-gray-600">feels like</p>
             <p id="list.main.feels_like">26°</p>
           </div>
 
           <!-- TIME & CITY -->
-          <div class="self-start col-start-1 col-end-3 row-start-2">
+          <div
+            class="self-start col-start-1 col-end-3 row-start-2 transform -translate-y-4"
+          >
             <p id="timeNow" class="text-3xl font-bold">18:00</p>
             <p id="cityName" class="text-lg font-bold">BREDENE</p>
           </div>
@@ -105,36 +109,38 @@
           <!-- TEMP -->
           <div
             id="list.main.temp"
-            class="self-end col-start-3 col-end-5 row-start-1 row-end-3 p-2 m-1 text-5xl font-bold"
+            class="col-start-3 col-end-5 row-start-1 row-end-3 p-2 text-5xl font-bold"
           >
-            <p class="transform translate-y-3">30</p>
-            <p class="text-2xl">°C</p>
+            <p class="transform translate-y-5">30°</p>
+            <!-- <p class="text-2xl">°C</p> -->
           </div>
 
           <!-- RAIN & CLOUD PROB -->
-          <div class="col-start-5 row-start-2 m-1 text-xs">
+          <div class="col-start-5 row-start-2 text-xs transform -translate-y-4">
             <p class="text-gray-600">rain</p>
             <p id="list.pop" class="text-lg">
-              50<span class="text-xs text-gray-500">%</span>
+              50
             </p>
+            <span class="text-xs text-gray-500">%</span>
           </div>
-          <div class="col-start-6 row-start-2 m-1 text-xs">
+          <div class="col-start-6 row-start-2 text-xs transform -translate-y-4">
             <p class="text-gray-600">clouds</p>
             <p id="list.clouds.all" class="text-lg">
-              50<span class="text-xs text-gray-500">%</span>
+              50
             </p>
+            <span class="text-xs text-gray-500">%</span>
           </div>
 
           <!-- RAIN & SNOW VOL -->
           <div
-            class="self-end col-start-1 row-start-3 p-1 m-1 text-xs rounded-full shadow"
+            class="self-end col-start-1 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
           >
             <p class="text-gray-600">rain</p>
             <p id="list.rain.3h" class="text-lg">10</p>
-            <p class="text-gray-500">hPa</p>
+            <p class="text-gray-500">mm</p>
           </div>
           <div
-            class="self-end col-start-2 row-start-3 p-1 m-1 text-xs rounded-full shadow"
+            class="self-end col-start-2 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
           >
             <p class="text-gray-600">snow</p>
             <p id="list.snow.3h" class="text-lg">10</p>
@@ -143,27 +149,33 @@
 
           <!-- WIND -->
           <div
-            class="relative w-32 col-start-3 col-end-5 row-start-3 row-end-4 p-1 m-1 mx-auto text-white bg-gray-700 rounded-full shadow-md"
+            class="relative col-start-3 col-end-5 row-start-3 row-end-4 p-1 mx-auto text-white bg-gray-700 rounded-full shadow-md"
           >
+            <img
+              title="N E S W"
+              src="images/forecast/nesw2.svg"
+              class="z-10 w-16 mx-auto rounded-full"
+              alt="Wind rose icon pointing in wind direction"
+            />
             <img
               title="Wind Rose"
               src="images/forecast/windrose.svg"
-              class="w-16 mx-auto rounded-full"
+              class="absolute top-0 left-0 right-0 z-20 w-16 mx-auto duration-1000 ease-linear transform translate-y-1 rounded-full hover:rotate-180"
               alt="Wind rose icon pointing in wind direction"
             />
             <div
               id="list.wind.speed"
               class="absolute top-0 left-0 right-0 mx-auto transform translate-y-5"
             >
-              <p class="text-lg">10</p>
-              <p class="text-xs text-gray-500">m/s</p>
+              <p class="z-30 text-lg">10</p>
+              <p class="z-30 text-xs text-gray-500 transform -translate-y-2">m/s</p>
             </div>
             <!-- <p id="list.wind.deg">NNE</p> -->
           </div>
 
           <!-- PRESSURE -->
           <div
-            class="self-end col-start-5 row-start-3 p-1 m-1 text-xs rounded-full shadow"
+            class="self-end col-start-5 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
           >
             <p class="text-gray-600">
               sea
@@ -174,7 +186,7 @@
             <p class="text-gray-500">hPa</p>
           </div>
           <div
-            class="self-end col-start-6 row-start-3 p-1 m-1 text-xs rounded-full shadow"
+            class="self-end col-start-6 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
           >
             <p class="text-gray-600">
               land
@@ -189,6 +201,23 @@
           <p id="list.main.humidity">50%</p>
           <p>Fog</p>
           <p id="list.visibility">20m</p> -->
+        </div>
+
+        <!-- MOBILE FORECAST -->
+        <div
+          id="forecast"
+          class="flex flex-wrap p-4 mt-3 text-center text-white bg-gray-800 rounded-lg shadow-md justify-evenly"
+        >
+          <!-- 3H INTERVAL #1 -->
+          <div
+            class="grid grid-cols-1 grid-rows-5 p-1 bg-gray-900 border border-gray-600 rounded-lg shadow"
+          >
+            <p>MON</p>
+            <p>21:00</p>
+            <p>20</p>
+            <p>50%</p>
+            <p>10m/s</p>
+          </div>
         </div>
       </div>
 
