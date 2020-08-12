@@ -64,7 +64,8 @@
       <div id="weatherBox" class="relative hidden my-3">
         <!-- WEATHER ICON -->
         <img
-          class="absolute left-0 right-0 z-20 w-24 p-2 mx-auto transition duration-700 transform -translate-y-12 bg-gray-300 rounded-full sm:-translate-y-24 sm:w-40 easy-linear hover:scale-110"
+          id="weatherIcon"
+          class="absolute left-0 right-0 z-20 w-24 p-2 mx-auto transition duration-700 transform -translate-y-12 bg-gray-300 rounded-b-full sm:-translate-y-24 sm:w-40 easy-linear hover:scale-110"
           src="images/forecast/sun.svg"
           alt="Current weather state icon"
         />
@@ -143,7 +144,7 @@
           >
             <img
               title="N E S W"
-              src="images/forecast/nesw2.svg"
+              src="images/forecast/nesw.svg"
               class="z-10 w-16 mx-auto rounded-full"
               alt="Wind rose icon pointing in wind direction"
             />
@@ -195,7 +196,7 @@
         <!-- FORECAST -->
         <div
           id="forecast"
-          class="flex flex-wrap justify-start max-w-xl p-4 mx-auto mt-6 text-xs text-center text-white bg-gray-800 rounded-lg shadow-md"
+          class="flex flex-wrap justify-between max-w-xl p-4 mx-auto mt-6 text-xs text-center text-white bg-gray-800 rounded-lg shadow-md"
         ></div>
       </div>
     </main>

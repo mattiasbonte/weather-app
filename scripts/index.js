@@ -23,7 +23,7 @@
     const city = document.querySelector('input').value;
     const weather = getWeather(city).catch(error);
     getWeather(city).catch(error);
-    printTemp(1, weather);
+    printTemp(weather);
   };
 
   //-----------//
@@ -139,7 +139,7 @@
   // ============= //
   // PRINTING HTML //
   // ============= //
-  async function printTemp(days, weather) {
+  async function printTemp(weather) {
     // Wait for Data from API
     const data = await weather;
 
@@ -150,6 +150,70 @@
     // Show WeatherBox
     const weatherBox = document.querySelector('#weatherBox').classList;
     weatherBox.remove('hidden');
+
+    // WEATHER ICON SWAP
+    const weatherIcon = document.querySelector('#weatherIcon');
+    const icon = data.list[0].weather[0].icon;
+    const src = 'images/status/';
+    switch (icon) {
+      case '01d': //day: clear sky
+        weatherIcon.src = `${src}sun.svg`;
+        break;
+      case '01n': //night: clear sky
+        weatherIcon.src = `${src}night-cloud-full.svg`;
+        break;
+      case '02d': //day: few clouds
+        weatherIcon.src = `${src}cloud-sun.svg`;
+        break;
+      case '02n': //night: few clouds
+        weatherIcon.src = `${src}night-cloud-half.svg`;
+        break;
+      case '03d': //day: scattered clouds
+        weatherIcon.src = `${src}clouds.svg`;
+        break;
+      case '03n': //night: scattered clouds
+        weatherIcon.src = `${src}night-cloud-half.svg`;
+        break;
+      case '04d': //day: broken clouds
+        weatherIcon.src = `${src}clouds.svg`;
+        break;
+      case '04n': //night: broken clouds
+        weatherIcon.src = `${src}night-cloud-half.svg`;
+        break;
+      case '09d': //day: shower rain
+        weatherIcon.src = `${src}rain.svg`;
+        break;
+      case '09n': //night: shower rain
+        weatherIcon.src = `${src}rain.svg`;
+        break;
+      case '10d': //day: light rain
+        weatherIcon.src = `${src}rain-sun.svg`;
+        break;
+      case '10n': //night: light rain
+        weatherIcon.src = `${src}rain.svg`;
+        break;
+      case '11d': //day: thunderstorm
+        weatherIcon.src = `${src}thunder-storm.svg`;
+        break;
+      case '11n': //night: thunderstorm
+        weatherIcon.src = `${src}thunder-storm.svg`;
+        break;
+      case '13d': //day: snow
+        weatherIcon.src = `${src}snowy.svg`;
+        break;
+      case '13n': //night: snow
+        weatherIcon.src = `${src}snowy.svg`;
+        break;
+      case '50d': //day: fog
+        weatherIcon.src = `${src}fog.svg`;
+        break;
+      case '50n': //night: fog
+        weatherIcon.src = `${src}fog-night.svg`;
+        break;
+      default:
+        weatherIcon.src = `${src}default.svg`;
+        break;
+    }
 
     // Print CURRENT [0] //
     // TEMPS
@@ -225,7 +289,7 @@
     const statusIcon = document.querySelector('#statusIcon');
     const description = data.list[0].weather[0].description;
     status.textContent = description;
-    statusIcon.src = `http://openweathermap.org/img/w/${data.list[0].weather[0].icon}.png`;
+    statusIcon.src = `http://openweathermap.org/img/w/${icon}.png`;
     statusIcon.alt = `${description} icon`;
     statusIcon.title = `${description} in ${cityName}`;
 
@@ -297,20 +361,28 @@
       const windSpeed = interval.wind.speed;
       const windDegree = interval.wind.deg;
       const windPos = windDir(windDegree);
+      // Get Weather Icon
+      const description = interval.weather[0].description;
+      const icon = interval.weather[0].icon;
+      const source = `http://openweathermap.org/img/w/${icon}.png`;
+
       // Print Segments Per Time Interval
       const segment = `
         <!-- 3H INTERVAL #${i + 1} -->
         <div
-          class="grid items-center grid-cols-1 grid-rows-2 p-3 m-1 bg-gray-900 border border-gray-600 rounded-lg shadow sm:grid-rows-3"
+          class="grid items-center grid-cols-1 grid-rows-2 p-3 m-1 bg-gray-900 border border-gray-600 rounded-lg shadow sm:grid-rows-4"
         >
           <div class="text-gray-500">
             <p>${day}</p>
             <p>${hours}</p>
           </div>
-          <p class="text-xl" title="It will be ${temp} Celsius at ${hours} in ${cityName}">${temp}</p>
+          <img src="${source}" class="w-8 mx-auto" alt="${description} icon" title="${description} on ${day} at ${hours}" />
+          <p class="text-lg" title="It will be ${temp} Celsius at ${hours} in ${cityName}">${temp}</p>
           <div class="hidden text-gray-400 sm:block">
             <p title="There is ${probRain}% change of rain on ${fullDay} around ${hours} in ${cityName}">${probRain}</p>
-            <p title="The wind at ${fullDay} around ${hours} in ${cityName} will blow ${windPos} at ${windSpeed}m/s">${windSpeed}</p>
+            <p title="The wind at ${fullDay} around ${hours} in ${cityName} will blow ${windPos} at ${windSpeed}m/s">${windSpeed.toFixed(
+        1
+      )}</p>
           </div>
         </div>
         `;
@@ -327,10 +399,10 @@
   // ======= //
   // COMPARE //
   // ======= //
-  document.querySelector('#compare').onclick = () => {
+  /* document.querySelector('#compare').onclick = () => {
     animCompare();
     console.log('compared!!');
-  };
+  }; */
 
   // TODO: Give option to compare 2 cities
 
