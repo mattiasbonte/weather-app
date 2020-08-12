@@ -121,6 +121,9 @@
     // Wait for Data from API
     const data = await weather;
 
+    // City Name
+    const cityName = data.city.name;
+
     // Show WeatherBox
     const weatherBox = document.querySelector('#weatherBox').classList;
     weatherBox.remove('hidden');
@@ -130,20 +133,20 @@
     const temp = document.querySelector('#temp');
     const currentTemp = `${(data.list[0].main.temp - 273).toFixed(0)}°`;
     temp.textContent = currentTemp;
-    temp.title = `It's currently ${currentTemp} Celsius in ${data.city.name}`;
+    temp.title = `It's currently ${currentTemp} Celsius in ${cityName}`;
     const min = document.querySelector('#min');
     const minTemp = `${(data.list[0].main.temp_min - 273).toFixed(0)}°`;
     min.textContent = minTemp;
-    min.title = `It will be minimum ${minTemp} Celsius in ${data.city.name}`;
+    min.title = `It will be minimum ${minTemp} Celsius in ${cityName}`;
     const max = document.querySelector('#max');
     const maxTemp = `${(data.list[0].main.temp_max - 273).toFixed(0)}°`;
     max.textContent = maxTemp;
-    max.title = `It will be maximum ${maxTemp} Celsius in ${data.city.name}`;
+    max.title = `It will be maximum ${maxTemp} Celsius in ${cityName}`;
     // FEELS
     const feels = document.querySelector('#feels');
     const feelsTemp = `${(data.list[0].main.feels_like - 273).toFixed(0)}°`;
     feels.textContent = feelsTemp;
-    feels.title = `It feels like ${feelsTemp} Celsius in ${data.city.name}`;
+    feels.title = `It feels like ${feelsTemp} Celsius in ${cityName}`;
     // TIME
     const thisTime = document.querySelector('#thisTime');
     const date = new Date();
@@ -154,15 +157,15 @@
     thisTime.textContent = `${hours}:${minutes}`;
     // CITY
     const thisCity = document.querySelector('#thisCity');
-    thisCity.textContent = data.city.name;
+    thisCity.textContent = cityName;
     // Probability RAIN
     const probRain = document.querySelector('#probRain');
     probRain.textContent = data.list[0].pop;
-    probRain.title = `There is a ${data.list[0].pop}% chance of rain in ${data.city.name}`;
+    probRain.title = `There is a ${data.list[0].pop}% chance of rain in ${cityName}`;
     // Probability CLOUDS
     const probCloud = document.querySelector('#probCloud');
     probCloud.textContent = data.list[0].clouds.all;
-    probCloud.title = `${data.list[0].clouds.all}% of the sky in ${data.city.name} is covered by clouds`;
+    probCloud.title = `${data.list[0].clouds.all}% of the sky in ${cityName} is covered by clouds`;
     // HUMIDITY
     const humidity = document.querySelector('#humidity');
     humidity.textContent = data.list[0].main.humidity;
@@ -170,7 +173,7 @@
     const visibility = document.querySelector('#visibility');
     const sight = data.list[0].visibility;
     sight > 900 ? (visibility.textContent = '+900') : (visibility.textContent = sight);
-    visibility.title = `It's possible to see ${sight} meters far in ${data.city.name}`;
+    visibility.title = `It's possible to see ${sight} meters far in ${cityName}`;
     // WIND
     const windSpeed = document.querySelector('#windSpeed');
     windSpeed.textContent = data.list[0].wind.speed.toFixed(0);
@@ -178,9 +181,9 @@
     const windDegree = data.list[0].wind.deg;
     windDeg.style.transform = `rotate(${windDegree}deg)`;
     const windPos = windDir(windDegree);
-    windDeg.title = `The wind in ${
-      data.city.name
-    } is blowing to ${windPos} at ${data.list[0].wind.speed.toFixed(0)}m/s `;
+    windDeg.title = `The wind in ${cityName} is blowing to ${windPos} at ${data.list[0].wind.speed.toFixed(
+      0
+    )}m/s `;
     // PRESSURES
     const sea = document.querySelector('#presSea');
     sea.textContent = data.list[0].main.sea_level;
@@ -198,8 +201,69 @@
 
     //
     // Print FORECAST [1-39]
+    const forecast = document.querySelector('#forecast');
+    let forecastPrint = '';
+    data.list.forEach((interval, i) => {
+      // Get Date/Time
+      const time = interval.dt_txt;
+      const date = new Date(time);
+      let day = date.getDay();
+      let hours = date.getHours();
+      hours < 10 ? (hours = `0${hours}`) : '';
+      hours = `${hours}:00`;
+      switch (day) {
+        case 0:
+          day = 'Sun';
+          break;
+        case 1:
+          day = 'Mon';
+          break;
+        case 2:
+          day = 'Tue';
+          break;
+        case 3:
+          day = 'Wed';
+          break;
+        case 4:
+          day = 'Thu';
+          break;
+        case 5:
+          day = 'Fri';
+          break;
+        case 6:
+          day = 'Sat';
+          break;
+      }
+      // Get Temp
+      const temp = `${(interval.main.temp - 273).toFixed(0)}°`;
+      // Get Prob Rain
+      const probRain = interval.pop;
+      // Get Wind Speed & Direction
+      const windSpeed = interval.wind.speed;
+      const windDegree = interval.wind.deg;
+      const windPos = windDir(windDegree);
+      // Print Segments Per Time Interval
+      const segment = `
+        <!-- 3H INTERVAL #${i + 1} -->
+        <div
+          class="grid items-center grid-cols-1 grid-rows-2 p-3 m-1 bg-gray-900 border border-gray-600 rounded-lg shadow sm:grid-rows-3"
+        >
+          <div class="text-gray-500">
+            <p>${day}</p>
+            <p>${hours}</p>
+          </div>
+          <p class="text-xl" title="It will be ${temp} Celsius in ${cityName}">${temp}</p>
+          <div class="hidden text-gray-400 sm:block">
+            <p title="There is ${probRain}% change of rain in ${cityName}">${probRain}</p>
+            <p title="The wind in ${cityName} will blow to ${windPos} at a speed of ${windSpeed}m/s">${windSpeed}</p>
+          </div>
+        </div>
+        `;
+      forecastPrint += segment;
+    });
 
-    console.log('data :>> ', data);
+    // Add Segments to html
+    forecast.innerHTML = forecastPrint;
   }
 
   // TODO: Fetch weather of next 5 days
