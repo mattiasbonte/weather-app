@@ -35,14 +35,17 @@
     <header class="m-5 font-bold text-center text-gray-500">Weather App</header>
 
     <nav class="">
-      <div id="controlsDiv" class="flex justify-center mb-5">
-        <p>compare &nbsp;</p>
-        <input
-          id="compareCheck"
-          class="hidden lg:block"
-          type="checkbox"
+      <div id="controlsDiv" class="flex justify-center mb-5 align-middle">
+        <div
+          id="compareControl"
+          class="p-2 px-4 m-2 bg-blue-500 border border-white rounded-full shadow-md"
           title="Compare 2 cities next to one another!"
-        />
+        >
+          <p class="inline mr-1 text-white">
+            compare
+          </p>
+          <input id="compareCheck" class="hidden lg:inline" type="checkbox" />
+        </div>
       </div>
     </nav>
 

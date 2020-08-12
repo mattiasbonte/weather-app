@@ -130,15 +130,20 @@
     audioWhoop.play();
     // Open/Close compareDiv on click
     const main = document.querySelector('main');
+    const compareControl = document.querySelector('#compareControl');
     const compareRight = document.querySelector('#compareRight');
     const compareCheck = document.querySelector('#compareCheck');
 
     if (compareCheck.checked) {
       //on
+      compareControl.classList.remove('bg-blue-500', 'border-white');
+      compareControl.classList.add('bg-green-500', 'border-black');
       main.classList.add('grid', 'grid-cols-2', 'gap-6');
       compareRight.classList.remove('hidden');
     } else {
       //off
+      compareControl.classList.remove('bg-green-500', 'border-black');
+      compareControl.classList.add('bg-blue-500', 'border-white');
       main.classList.remove('grid', 'grid-cols-2', 'gap-6');
       compareRight.classList.add('hidden');
     }
