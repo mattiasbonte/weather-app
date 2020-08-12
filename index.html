@@ -61,7 +61,7 @@
         </div>
       </div>
 
-      <div id="weatherBox" class="relative my-3">
+      <div id="weatherBox" class="relative hidden my-3">
         <!-- WEATHER ICON -->
         <img
           class="absolute left-0 right-0 z-20 w-24 p-2 mx-auto transition duration-700 transform -translate-y-12 bg-gray-300 rounded-full sm:-translate-y-24 sm:w-40 easy-linear hover:scale-110"
@@ -70,81 +70,80 @@
           alt="Current weather state icon"
         />
 
-        <!-- MOBILE CURRENT -->
+        <!-- CURRENT -->
         <div
-          id="currentWeather"
-          class="grid items-center grid-cols-6 grid-rows-3 gap-2 p-4 text-center text-white bg-gray-800 rounded-lg shadow-md"
+          id="current"
+          class="grid items-center max-w-xl grid-cols-6 grid-rows-3 gap-2 p-4 mx-auto text-center text-white bg-gray-800 rounded-lg shadow-lg"
         >
+          <!-- TEMP -->
+          <div
+            id="temp"
+            class="col-start-3 col-end-5 row-start-1 row-end-3 p-2 font-bold transform translate-x-3 translate-y-6 sm:text-6xl"
+          >
+            XX°
+          </div>
           <!-- MIN -->
           <div
             class="self-start col-start-1 row-start-1 bg-blue-500 border border-white rounded-l-lg shadow"
           >
-            <p class="text-xs text-gray-400">min</p>
-            <p id="list.main.temp_min">20°</p>
+            <p class="text-xs text-gray-300">min</p>
+            <p id="min">XX°</p>
           </div>
           <!-- MAX -->
           <div
             class="self-start col-start-2 row-start-1 bg-red-500 border border-white rounded-r-lg shadow"
           >
-            <p class="text-xs text-gray-400">max</p>
-            <p id="list.main.temp_max">40°</p>
+            <p class="text-xs text-gray-300">max</p>
+            <p id="max">XX°</p>
           </div>
 
-          <!-- FEELS LIKE -->
+          <!-- STATUS -->
           <div
             class="self-start col-start-5 col-end-7 row-start-1 bg-indigo-800 border border-gray-600 rounded-lg shadow"
           >
-            <p class="text-xs text-gray-600">feels like</p>
-            <p id="list.main.feels_like">26°</p>
+            <p id="status" class="text-white">XXX</p>
+            <span class="text-xs text-gray-400">&nbsp feels</span>
+            <span id="feels">XX°</span>
           </div>
 
           <!-- TIME & CITY -->
           <div
             class="self-start col-start-1 col-end-3 row-start-2 transform -translate-y-4"
           >
-            <p id="timeNow" class="text-3xl font-bold">18:00</p>
-            <p id="cityName" class="text-lg font-bold">BREDENE</p>
-          </div>
-
-          <!-- TEMP -->
-          <div
-            id="list.main.temp"
-            class="col-start-3 col-end-5 row-start-1 row-end-3 p-2 text-5xl font-bold"
-          >
-            <p class="transform translate-y-5">30°</p>
-            <!-- <p class="text-2xl">°C</p> -->
+            <p id="thisTime" class="text-3xl font-bold">HH:MM</p>
+            <p id="thisCity" class="text-lg font-bold">City</p>
           </div>
 
           <!-- RAIN & CLOUD PROB -->
           <div class="col-start-5 row-start-2 text-xs transform -translate-y-4">
             <p class="text-gray-600">rain</p>
-            <p id="list.pop" class="text-lg">
-              50
+            <p id="probRain" class="text-lg">
+              XX
             </p>
             <span class="text-xs text-gray-500">%</span>
           </div>
           <div class="col-start-6 row-start-2 text-xs transform -translate-y-4">
             <p class="text-gray-600">clouds</p>
-            <p id="list.clouds.all" class="text-lg">
-              50
+            <p id="probCloud" class="text-lg">
+              XX
             </p>
             <span class="text-xs text-gray-500">%</span>
           </div>
 
-          <!-- RAIN & SNOW VOL -->
+          <!-- HUMIDITY & VISIBILITY -->
           <div
             class="self-end col-start-1 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-l-lg shadow"
           >
-            <p class="text-gray-600">rain</p>
-            <p id="list.rain.3h" class="text-lg">10</p>
-            <p class="text-gray-500">mm</p>
+            <p class="text-gray-600">humid</p>
+            <p id="humidity" class="text-base">XX</p>
+            <p class="text-gray-500">%</p>
           </div>
           <div
             class="self-end col-start-2 row-start-3 p-1 text-xs bg-gray-900 border border-gray-600 rounded-r-lg shadow"
           >
-            <p class="text-gray-600">snow</p>
-            <p id="list.snow.3h" class="text-lg">10</p>
-            <p class="text-gray-500">mm</p>
+            <p class="text-gray-600">sight</p>
+            <p id="visibility" class="text-base">XX</p>
+            <p class="text-gray-500">m</p>
           </div>
 
           <!-- WIND -->
@@ -180,8 +179,8 @@
             <p class="text-gray-600">
               sea
             </p>
-            <p id="list.main.sea_level" class="text-lg">
-              20
+            <p id="presSea" class="text-base">
+              XX
             </p>
             <p class="text-gray-500">hPa</p>
           </div>
@@ -191,95 +190,34 @@
             <p class="text-gray-600">
               land
             </p>
-            <p id="list.main.grnd_level" class="text-lg">
-              50
+            <p id="presLand" class="text-base">
+              XX
             </p>
             <p class="text-gray-500">hPa</p>
           </div>
-
-          <!-- <p>Humid</p>
-          <p id="list.main.humidity">50%</p>
-          <p>Fog</p>
-          <p id="list.visibility">20m</p> -->
         </div>
 
-        <!-- MOBILE FORECAST -->
+        <!-- FORECAST -->
         <div
           id="forecast"
-          class="flex flex-wrap p-4 mt-3 text-center text-white bg-gray-800 rounded-lg shadow-md justify-evenly"
+          class="flex flex-wrap justify-start p-4 mt-3 text-xs text-center text-white bg-gray-800 rounded-lg shadow-md"
         >
           <!-- 3H INTERVAL #1 -->
           <div
-            class="grid grid-cols-1 grid-rows-5 p-1 bg-gray-900 border border-gray-600 rounded-lg shadow"
+            class="grid items-center grid-cols-1 grid-rows-2 p-3 m-1 bg-gray-900 border border-gray-600 rounded-lg shadow sm:grid-rows-3"
           >
-            <p>MON</p>
-            <p>21:00</p>
-            <p>20</p>
-            <p>50%</p>
-            <p>10m/s</p>
+            <div class="text-gray-500">
+              <p>MON</p>
+              <p>21:00</p>
+            </div>
+            <p class="text-xl">20*</p>
+            <div class="hidden text-gray-400 sm:block">
+              <p>50%</p>
+              <p>10m/s</p>
+            </div>
           </div>
         </div>
       </div>
-
-      <!-- <div id="tempTable" class="grid grid-cols-1 gap-5">
-          <div class="p-4 bg-white border rounded-lg shadow-md">
-            <h1 class="col-span-2">MON (#day)</h1>
-            <p class="text-right">TIME:&nbsp;</p>
-            <p class="text-left">&nbsp;1800</p>
-            <p class="text-right">TEMP:&nbsp;</p>
-          </div>
-        </div> -->
-      <!-- <div id="tempTable" class="grid grid-cols-5 gap-5">
-          <div class="grid grid-cols-2 text-center bg-white rounded-md shadow">
-            <h1 class="col-span-2">MON (#day)</h1>
-            <p class="text-right">TIME:&nbsp;</p>
-            <p class="text-left">&nbsp;1800</p>
-            <p class="text-right">TEMP:&nbsp;</p>
-            <p class="text-left">&nbsp;32*</p>
-            <p class="text-right">MIN:&nbsp;</p>
-            <p class="text-left">&nbsp;25*</p>
-            <p class="text-right">MAX:&nbsp;</p>
-            <p class="text-left">&nbsp;40*</p>
-            <p class="text-right">HUMID:&nbsp;</p>
-            <p class="text-left">&nbsp;100*</p>
-          </div>
-          <div class="grid grid-cols-2 text-center bg-white rounded-md shadow">
-            <h1 class="col-span-2">MON</h1>
-            <p class="text-right">DAY:&nbsp;</p>
-            <p class="text-left">&nbsp;12</p>
-            <p class="text-right">TIME</p>
-            <p class="text-left">1800</p>
-            <p class="text-right">TEMP</p>
-            <p class="text-left">32*</p>
-          </div>
-          <div class="grid grid-cols-2 text-center bg-white rounded-md shadow">
-            <h1 class="col-span-2">MON</h1>
-            <p class="text-right">DAY</p>
-            <p class="text-left">12</p>
-            <p class="text-right">TIME</p>
-            <p class="text-left">1800</p>
-            <p class="text-right">TEMP</p>
-            <p class="text-left">32*</p>
-          </div>
-          <div class="grid grid-cols-2 text-center bg-white rounded-md shadow">
-            <h1 class="col-span-2">MON</h1>
-            <p class="text-right">DAY</p>
-            <p class="text-left">12</p>
-            <p class="text-right">TIME</p>
-            <p class="text-left">1800</p>
-            <p class="text-right">TEMP</p>
-            <p class="text-left">32*</p>
-          </div>
-          <div class="grid grid-cols-2 text-center bg-white rounded-md shadow">
-            <h1 class="col-span-2">MON</h1>
-            <p class="text-right">DAY</p>
-            <p class="text-left">12</p>
-            <p class="text-right">TIME</p>
-            <p class="text-left">1800</p>
-            <p class="text-right">TEMP</p>
-            <p class="text-left">32*</p>
-          </div>
-        </div> -->
     </main>
 
     <aside class=""></aside>

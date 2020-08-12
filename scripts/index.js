@@ -85,19 +85,67 @@
 
   // PRINT
   async function printTemp(days, weather) {
+    // Wait for Data from API
     const data = await weather;
+
+    // Show WeatherBox
+    const weatherBox = document.querySelector('#weatherBox').classList;
+    weatherBox.remove('hidden');
+
+    // Print CURRENT [0]
+    // TEMPS
+    const temp = document.querySelector('#temp');
+    temp.textContent = `${(data.list[0].main.temp - 273).toFixed(0)}°`;
+    const min = document.querySelector('#min');
+    min.textContent = `${(data.list[0].main.temp_min - 273).toFixed(0)}°`;
+    const max = document.querySelector('#max');
+    max.textContent = `${(data.list[0].main.temp_max - 273).toFixed(0)}°`;
+    // STATUS
+    const status = document.querySelector('#status');
+    status.textContent = data.list[0].weather[0].description;
+    const feels = document.querySelector('#feels');
+    feels.textContent = `${(data.list[0].main.feels_like - 273).toFixed(0)}°`;
+    // TIME
+    const thisTime = document.querySelector('#thisTime');
+    const date = new Date();
+    const day = date.getDate();
+    const hours = date.getHours();
+    let minutes = date.getMinutes();
+    minutes < 10 ? (minutes = `0${minutes}`) : '';
+
+    thisTime.textContent = `${hours}:${minutes}`;
+    // CITY
+    const thisCity = document.querySelector('#thisCity');
+    thisCity.textContent = data.city.name;
+    // Probability RAIN
+    const probRain = document.querySelector('#probRain');
+    probRain.textContent = data.list[0].pop;
+    // Probability CLOUDS
+    const probCloud = document.querySelector('#probCloud');
+    probCloud.textContent = data.list[0].clouds.all;
+    // HUMIDITY
+    const humidity = document.querySelector('#humidity');
+    humidity.textContent = data.list[0].main.humidity;
+    // VISIBILITY in meters
+    const visibility = document.querySelector('#visibility');
+    const sight = data.list[0].visibility;
+    visibility.title = `${sight} meter visibility`;
+    sight > 900 ? (visibility.textContent = '+900') : (visibility.textContent = sight);
+
+    // PRESSURES
+    const sea = document.querySelector('#presSea');
+    const land = document.querySelector('#presLand');
+    sea.textContent = data.list[0].main.sea_level;
+    land.textContent = data.list[0].main.grnd_level;
+
+    // Print FORECAST [1-39]
+
     console.log('data :>> ', data);
     /* console.log(data.city.name, 'print city name');
     console.log('data.list.dt :>> ', data.list[0].dt);
     console.log('data.list.temp :>> ', data.list[0].main.temp);
     console.log('data.list.main.temp_min :>> ', data.list[0].main.temp_min);
     console.log('data.list.main.temp_max :>> ', data.list[0].main.temp_max); */
-
-    const time = data.list[0].dt_txt;
-    const date = new Date(time);
-    const day = date.getDate();
-    const hour = date.getHours();
-    console.log('Day: ', day, 'Hour: ', hour);
   }
 
   // TODO: Fetch weather of next 5 days
