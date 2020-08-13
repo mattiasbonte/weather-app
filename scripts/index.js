@@ -28,7 +28,8 @@
   // Handle LEFT submit button
   document.querySelector('#submitLeft').onclick = () => {
     animInput('#inputDivLeft');
-    const country = 'BE';
+    const input = document.querySelector('#inputLeft').value;
+    const country = input.split(',').pop();
     const city = document.querySelector('#inputLeft').value;
     const weather = getWeather(city, country).catch(error);
     const forecast = getForecast(city, country).catch(error);
@@ -38,7 +39,8 @@
   // Handle RIGHT submit button
   document.querySelector('#submitRight').onclick = () => {
     animInput('#inputDivRight');
-    const country = 'BE';
+    const input = document.querySelector('#inputRight').value;
+    const country = input.split(',').pop();
     const city = document.querySelector('#inputRight').value;
     const weather = getWeather(city, country).catch(error);
     const forecast = getForecast(city, country).catch(error);
