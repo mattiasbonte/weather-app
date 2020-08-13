@@ -29,6 +29,9 @@
     <link rel="stylesheet" type="text/css" href="styles/index.css" />
     <!-- SCRIPTS -->
     <script src="scripts/index.js" defer></script>
+    <script src="scripts/chart.js" defer></script>
+    <script src="scripts/places.js" defer></script>
+    <script src="scripts/search.js" defer></script>
   </head>
 
   <body class="container box-border p-2 mx-auto prose bg-gray-300">
@@ -46,6 +49,16 @@
           </p>
           <input id="compareCheck" class="hidden cursor-pointer" type="checkbox" />
         </div>
+        <div
+          id="chartControl"
+          class="hidden p-2 px-4 m-2 bg-blue-500 border border-white rounded-full shadow-md cursor-pointer md:inline"
+          title="Compare 2 cities next to one another!"
+        >
+          <p class="inline mr-1 text-white">
+            chart
+          </p>
+          <input id="chartCheck" class="hidden cursor-pointer" type="checkbox" />
+        </div>
       </div>
     </nav>
 
@@ -54,21 +67,20 @@
       <div id="compareLeft">
         <div
           id="inputDivLeft"
-          class="max-w-sm p-5 mx-auto mb-16 text-center bg-gray-100 border rounded-lg shadow-md sm:mb-32 hover:shadow-lg"
+          class="max-w-sm p-5 mx-auto mb-16 bg-gray-100 border rounded-lg shadow-md sm:mb-32 hover:shadow-lg"
         >
           <div
             class="flex flex-wrap items-center justify-between py-2 border-b border-teal-500"
           >
             <input
               id="inputLeft"
-              class="w-40 px-2 py-1 leading-tight text-gray-700 bg-transparent border-none appearance-none focus:outline-none"
-              type="text"
-              placeholder="City"
-              aria-label="City"
+              class="px-2 py-1 leading-tight text-left text-gray-700 bg-transparent border-none appearance-none focus:outline-none"
+              type="search"
+              placeholder="City name"
             />
             <button
               id="submitLeft"
-              class="px-2 py-1 text-sm text-white bg-teal-500 border-4 border-teal-500 rounded hover:bg-teal-700 hover:border-teal-700"
+              class="hidden px-2 py-1 text-sm text-white bg-teal-500 border-4 border-teal-500 rounded hover:bg-teal-700 hover:border-teal-700"
               type="button"
             >
               Go
@@ -80,7 +92,7 @@
           <!-- WEATHER ICON -->
           <img
             id="weatherIconLeft"
-            class="absolute left-0 right-0 z-20 w-24 p-2 mx-auto transition duration-700 transform -translate-y-12 bg-gray-800 rounded-full sm:-translate-y-24 sm:w-40 easy-linear hover:scale-110"
+            class="absolute left-0 right-0 z-20 w-24 p-2 mx-auto transition duration-700 transform -translate-y-12 sm:-translate-y-24 sm:w-40 easy-linear hover:scale-110"
             src="images/forecast/sun.svg"
             alt="Current weather state icon"
           />
@@ -220,21 +232,20 @@
       <div id="compareRight" class="hidden">
         <div
           id="inputDivRight"
-          class="max-w-sm p-5 mx-auto mb-16 text-center bg-gray-100 border rounded-lg shadow-md sm:mb-32 hover:shadow-lg"
+          class="max-w-sm p-5 mx-auto mb-16 bg-gray-100 border rounded-lg shadow-md sm:mb-32 hover:shadow-lg"
         >
           <div
             class="flex flex-wrap items-center justify-between py-2 border-b border-teal-500"
           >
             <input
               id="inputRight"
-              class="w-40 px-2 py-1 leading-tight text-gray-700 bg-transparent border-none appearance-none focus:outline-none"
+              class="px-2 py-1 leading-tight text-left text-gray-700 bg-transparent border-none appearance-none focus:outline-none"
               type="text"
-              placeholder="City"
-              aria-label="City"
+              placeholder="City name"
             />
             <button
               id="submitRight"
-              class="px-2 py-1 text-sm text-white bg-teal-500 border-4 border-teal-500 rounded hover:bg-teal-700 hover:border-teal-700"
+              class="hidden px-2 py-1 text-sm text-white bg-teal-500 border-4 border-teal-500 rounded hover:bg-teal-700 hover:border-teal-700"
               type="button"
             >
               Go
@@ -246,7 +257,7 @@
           <!-- WEATHER ICON -->
           <img
             id="weatherIconRight"
-            class="absolute left-0 right-0 z-20 w-24 p-2 mx-auto transition duration-700 transform -translate-y-12 bg-gray-800 rounded-full sm:-translate-y-24 sm:w-40 easy-linear hover:scale-110"
+            class="absolute left-0 right-0 z-20 w-24 p-2 mx-auto transition duration-700 transform -translate-y-12 sm:-translate-y-24 sm:w-40 easy-linear hover:scale-110"
             src="images/forecast/sun.svg"
             alt="Current weather state icon"
           />

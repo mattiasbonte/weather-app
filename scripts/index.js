@@ -33,6 +33,7 @@
     const weather = getWeather(city, country).catch(error);
     const forecast = getForecast(city, country).catch(error);
     printTemp(weather, forecast, 'Left');
+    let alertArray = [];
   };
   // Handle RIGHT submit button
   document.querySelector('#submitRight').onclick = () => {
@@ -42,10 +43,15 @@
     const weather = getWeather(city, country).catch(error);
     const forecast = getForecast(city, country).catch(error);
     printTemp(weather, forecast, 'Right');
+    let alertArray = [];
   };
   // Compare ON/OFF
   document.querySelector('#compareControl').onclick = () => {
     animCompare();
+  };
+  // Chart ON/OFF
+  document.querySelector('#chartControl').onclick = () => {
+    animChart();
   };
 
   //-----------//
@@ -159,6 +165,28 @@
       iconLeft.classList.add('sm:-translate-y-24', 'sm:w-40');
       iconRight.classList.remove('lg:-translate-y-24', 'lg:w-40');
       iconRight.classList.add('sm:-translate-y-24', 'sm:w-40');
+    }
+  }
+
+  function animChart() {
+    // audio
+    const audioWhoop = new Audio('audio/whoop.mp3');
+    audioWhoop.play();
+
+    const chartControl = document.querySelector('#chartControl');
+    const chartCheck = document.querySelector('#chartCheck');
+
+    // Toggle checkbox on click
+    chartCheck.checked ? (chartCheck.checked = false) : (chartCheck.checked = true);
+
+    if (chartCheck.checked) {
+      //on
+      chartControl.classList.remove('bg-blue-500', 'border-white');
+      chartControl.classList.add('bg-green-500', 'border-black');
+    } else {
+      //off
+      chartControl.classList.remove('bg-green-500', 'border-black');
+      chartControl.classList.add('bg-blue-500', 'border-white');
     }
   }
 
@@ -324,12 +352,12 @@
     const windPos = windDir(windDegree);
     windSpeed.textContent = windSpd;
     windDeg.style.transform = `rotate(${windDegree}deg)`;
-    windDeg.title = `The wind in ${cityName} is blowing to ${windPos} at ${windSpd}m/s `;
+    windDeg.title = `Wind blows ${windPos} at ${windSpd}m/s in ${cityName}`;
     // PRESSURES
     const sea = document.querySelector(`#presSea${id}`);
-    const seaPress = weatherData.main.sea_level;
+    const seaPress = forecastData.list[0].main.sea_level;
     const land = document.querySelector(`#presLand${id}`);
-    const landPress = weatherData.main.grnd_level;
+    const landPress = forecastData.list[0].main.grnd_level;
     sea.textContent = seaPress;
     land.textContent = landPress;
     sea.title = `Atmospheric pressure at sea level is ${seaPress} hPa`;
@@ -342,6 +370,8 @@
     statusIcon.src = `https://openweathermap.org/img/w/${icon}.png`;
     statusIcon.alt = `${description} icon`;
     statusIcon.title = `${description} in ${cityName}`;
+    weatherIcon.alt = `${description} icon`;
+    weatherIcon.title = `${description} in ${cityName}`;
 
     // ===================== //
     // Print FORECAST [1-39] //
@@ -420,39 +450,49 @@
 
       // Print Segments Per Time Interval
       const segment = `
-        <!-- 3H INTERVAL #${i + 1} -->
+        <!-- 3H SEGMENT #${i + 1} -->
         <div
-          class="grid items-center grid-cols-1 grid-rows-2 p-3 m-1 bg-gray-900 border border-gray-600 rounded-lg shadow sm:grid-rows-4"
+          class="segment${id} grid items-center grid-cols-1 grid-rows-2 p-3 m-1 bg-gray-900 border border-gray-600 rounded-lg shadow sm:grid-rows-4 cursor-pointer"
         >
           <div class="text-gray-500">
             <p>${day}</p>
             <p>${hours}</p>
           </div>
           <img src="${source}" class="w-8 mx-auto" alt="${description} icon" title="${description} on ${day} at ${hours}" />
-          <p class="text-lg" title="${temp} Celsius at ${hours} ${fullDay} in ${cityName}">${temp}</p>
+          <p class="text-lg" title="${temp} Celsius at ${fullDay} ${hours} in ${cityName}">${temp}</p>
           <div class="hidden text-gray-400 sm:block">
-            <p title="${probRain}% chance of rain at ${hours} ${fullDay} in ${cityName}">${probRain}</p>
-            <p title="Wind ${windSpeed}m/s, from ${windPos}, at ${hours} ${fullDay} in ${cityName}">${windSpeed.toFixed(
+            <p title="${probRain}% chance of rain at ${fullDay} ${hours} in ${cityName}">${probRain}</p>
+            <p title="Wind ${windSpeed}m/s, from ${windPos}, at ${fullDay} ${hours} in ${cityName}">${windSpeed.toFixed(
         1
       )}</p>
           </div>
         </div>
         `;
       forecastPrint += segment;
+
+      // Create Descriptive text for each segment
+      const describeSegment = `On ${fullDay} at ${hours} temperature will be ${temp} Celsius. Chance of rain is ${probRain}%. Wind blows from ${windPos} at ${windSpeed}. We have ${description}`;
+      // alertArray.id.push(describeSegment);
     });
     // Add all Segments to html
     forecastDiv.innerHTML = forecastPrint;
+
+    // Click Info Box Per Segment
+    const allSegments = document.querySelectorAll(`.segment${id}`);
+    allSegments.forEach((segment, i) =>
+      segment.addEventListener('click', () => {
+        // const alertText = alertArray[i];
+        // alert(alertText);
+        console.log(`test${id}`, i);
+      })
+    );
   }
 
+  // TODO: AUTOCOMPLETE CITY NAMES
+  // TODO: If autocomplete works, find a way to add country?
   // TODO: Display line graph of temp over time chart.js
   // PHOTO
   // TODO: use unsplash.com to show photo of requested city
-
-  // ======= //
-  // COMPARE //
-  // ======= //
-
-  // TODO: Give option to compare 2 cities
 
   //
 })();
