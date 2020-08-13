@@ -30,18 +30,18 @@
     animInput('#inputDivLeft');
     const country = 'BE';
     const city = document.querySelector('#inputLeft').value;
-    const weather = getWeather(city).catch(error);
-    getWeather(city, country).catch(error);
-    printTemp(weather, 'Left');
+    const weather = getWeather(city, country).catch(error);
+    const forecast = getForecast(city, country).catch(error);
+    printTemp(weather, forecast, 'Left');
   };
   // Handle RIGHT submit button
   document.querySelector('#submitRight').onclick = () => {
     animInput('#inputDivRight');
     const country = 'BE';
     const city = document.querySelector('#inputRight').value;
-    const weather = getWeather(city).catch(error);
-    getWeather(city, country).catch(error);
-    printTemp(weather, 'Right');
+    const weather = getWeather(city, country).catch(error);
+    const forecast = getForecast(city, country).catch(error);
+    printTemp(weather, forecast, 'Right');
   };
   // Compare ON/OFF
   document.querySelector('#compareControl').onclick = () => {
@@ -133,6 +133,8 @@
     const compareControl = document.querySelector('#compareControl');
     const compareRight = document.querySelector('#compareRight');
     const compareCheck = document.querySelector('#compareCheck');
+    const iconLeft = document.querySelector('#weatherIconLeft');
+    const iconRight = document.querySelector('#weatherIconRight');
 
     // Toggle checkbox on click
     compareCheck.checked ? (compareCheck.checked = false) : (compareCheck.checked = true);
@@ -143,12 +145,20 @@
       compareControl.classList.add('bg-green-500', 'border-black');
       main.classList.add('grid', 'grid-cols-2', 'gap-6');
       compareRight.classList.remove('hidden');
+      iconLeft.classList.remove('sm:-translate-y-24', 'sm:w-40');
+      iconLeft.classList.add('lg:-translate-y-24', 'lg:w-40');
+      iconRight.classList.remove('sm:-translate-y-24', 'sm:w-40');
+      iconRight.classList.add('lg:-translate-y-24', 'lg:w-40');
     } else {
       //off
       compareControl.classList.remove('bg-green-500', 'border-black');
       compareControl.classList.add('bg-blue-500', 'border-white');
       main.classList.remove('grid', 'grid-cols-2', 'gap-6');
       compareRight.classList.add('hidden');
+      iconLeft.classList.remove('lg:-translate-y-24', 'lg:w-40');
+      iconLeft.classList.add('sm:-translate-y-24', 'sm:w-40');
+      iconRight.classList.remove('lg:-translate-y-24', 'lg:w-40');
+      iconRight.classList.add('sm:-translate-y-24', 'sm:w-40');
     }
   }
 
@@ -156,6 +166,14 @@
   // FETCH DATA //
   // ========== //
   async function getWeather(city, country) {
+    const apiKey = '16b8985dd4d01e5dda0af6d392345499';
+    const countryCode = country;
+    const weatherCall = `https://api.openweathermap.org/data/2.5/weather?q=${city},${countryCode}&appid=${apiKey}`;
+    // this gets the data from now for a specific city
+    const response = await fetch(weatherCall);
+    return response.json();
+  }
+  async function getForecast(city, country) {
     const apiKey = '16b8985dd4d01e5dda0af6d392345499';
     const countryCode = country;
     const weatherCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city},${countryCode}&appid=${apiKey}`;
@@ -171,12 +189,13 @@
   // ============= //
   // PRINTING HTML //
   // ============= //
-  async function printTemp(weather, id) {
+  async function printTemp(weather, forecast, id) {
     // Wait for Data from API
-    const data = await weather;
+    const weatherData = await weather;
+    const forecastData = await forecast;
 
     // City Name
-    const cityName = data.city.name;
+    const cityName = weatherData.name;
     setCity(cityName, id);
 
     // Show WeatherBox
@@ -185,7 +204,7 @@
 
     // WEATHER ICON SWAP
     const weatherIcon = document.querySelector(`#weatherIcon${id}`);
-    const icon = data.list[0].weather[0].icon;
+    const icon = weatherData.weather[0].icon;
     const src = 'images/status/';
     switch (icon) {
       case '01d': //day: clear sky
@@ -250,11 +269,11 @@
     // Print CURRENT [0] //
     // TEMPS
     const temp = document.querySelector(`#temp${id}`);
-    const currentTemp = `${(data.list[0].main.temp - 273).toFixed(0)}°`;
+    const currentTemp = `${(weatherData.main.temp - 273).toFixed(0)}°`;
     const min = document.querySelector(`#min${id}`);
-    const minTemp = `${(data.list[0].main.temp_min - 273).toFixed(0)}°`;
+    const minTemp = `${(weatherData.main.temp_min - 273).toFixed(0)}°`;
     const max = document.querySelector(`#max${id}`);
-    const maxTemp = `${(data.list[0].main.temp_max - 273).toFixed(0)}°`;
+    const maxTemp = `${(weatherData.main.temp_max - 273).toFixed(0)}°`;
     temp.textContent = currentTemp;
     min.textContent = minTemp;
     max.textContent = maxTemp;
@@ -263,7 +282,7 @@
     max.title = `It will be maximum ${maxTemp} Celsius in ${cityName}`;
     // FEELS
     const feels = document.querySelector(`#feels${id}`);
-    const feelsTemp = `${(data.list[0].main.feels_like - 273).toFixed(0)}°`;
+    const feelsTemp = `${(weatherData.main.feels_like - 273).toFixed(0)}°`;
     feels.textContent = feelsTemp;
     feels.title = `It feels like ${feelsTemp} Celsius in ${cityName}`;
     // TIME
@@ -279,38 +298,38 @@
     thisCity.textContent = cityName;
     // Probability RAIN
     const probRain = document.querySelector(`#probRain${id}`);
-    const probRainCalc = (data.list[0].pop * 100).toFixed(0);
+    const probRainCalc = (forecastData.list[0].pop * 100).toFixed(0);
     probRain.textContent = probRainCalc;
     probRain.title = `There is a ${probRainCalc}% chance of rain in ${cityName}`;
     // Probability CLOUDS
     const probCloud = document.querySelector(`#probCloud${id}`);
-    const probCld = data.list[0].clouds.all.toFixed(0);
+    const probCld = weatherData.clouds.all.toFixed(0);
     probCloud.textContent = probCld;
     probCloud.title = `${probCld}% of the sky in ${cityName} is covered by clouds`;
     // HUMIDITY
     const humidity = document.querySelector(`#humidity${id}`);
-    const humid = data.list[0].main.humidity;
+    const humid = weatherData.main.humidity;
     humidity.textContent = humid;
     humidity.title = `There is ${humid}% humidity in the air in ${cityName}`;
     // VISIBILITY
     const visibility = document.querySelector(`#visibility${id}`);
-    const sight = data.list[0].visibility;
+    const sight = weatherData.visibility;
     sight > 900 ? (visibility.textContent = '+900') : (visibility.textContent = sight);
     visibility.title = `It's possible to see ${sight} meters far in ${cityName}`;
     // WIND
     const windSpeed = document.querySelector(`#windSpeed${id}`);
     const windDeg = document.querySelector(`#windDeg${id}`);
-    const windSpd = data.list[0].wind.speed.toFixed(0);
-    const windDegree = data.list[0].wind.deg;
+    const windSpd = weatherData.wind.speed.toFixed(0);
+    const windDegree = weatherData.wind.deg;
     const windPos = windDir(windDegree);
     windSpeed.textContent = windSpd;
     windDeg.style.transform = `rotate(${windDegree}deg)`;
     windDeg.title = `The wind in ${cityName} is blowing to ${windPos} at ${windSpd}m/s `;
     // PRESSURES
     const sea = document.querySelector(`#presSea${id}`);
-    const seaPress = data.list[0].main.sea_level;
+    const seaPress = weatherData.main.sea_level;
     const land = document.querySelector(`#presLand${id}`);
-    const landPress = data.list[0].main.grnd_level;
+    const landPress = weatherData.main.grnd_level;
     sea.textContent = seaPress;
     land.textContent = landPress;
     sea.title = `Atmospheric pressure at sea level is ${seaPress} hPa`;
@@ -318,7 +337,7 @@
     // STATUS
     const status = document.querySelector(`#status${id}`);
     const statusIcon = document.querySelector(`#statusIcon${id}`);
-    const description = data.list[0].weather[0].description;
+    const description = weatherData.weather[0].description;
     status.textContent = description;
     statusIcon.src = `https://openweathermap.org/img/w/${icon}.png`;
     statusIcon.alt = `${description} icon`;
@@ -327,9 +346,9 @@
     // ===================== //
     // Print FORECAST [1-39] //
     // ===================== //
-    const forecast = document.querySelector(`#forecast${id}`);
+    const forecastDiv = document.querySelector(`#forecast${id}`);
     let forecastPrint = '';
-    data.list.forEach((interval, i) => {
+    forecastData.list.forEach((interval, i) => {
       // Get Date/Time
       const time = interval.dt_txt;
       const adaptTime = time.replace(' ', 'T');
@@ -422,7 +441,7 @@
       forecastPrint += segment;
     });
     // Add all Segments to html
-    forecast.innerHTML = forecastPrint;
+    forecastDiv.innerHTML = forecastPrint;
   }
 
   // TODO: Display line graph of temp over time chart.js
