@@ -44,8 +44,7 @@
     printTemp(weather, 'Right');
   };
   // Compare ON/OFF
-  let compClick;
-  document.querySelector('#compareCheck').onclick = () => {
+  document.querySelector('#compareControl').onclick = () => {
     animCompare();
   };
 
@@ -128,11 +127,15 @@
     // audio
     const audioWhoop = new Audio('audio/whoop.mp3');
     audioWhoop.play();
+
     // Open/Close compareDiv on click
     const main = document.querySelector('main');
     const compareControl = document.querySelector('#compareControl');
     const compareRight = document.querySelector('#compareRight');
     const compareCheck = document.querySelector('#compareCheck');
+
+    // Toggle checkbox on click
+    compareCheck.checked ? (compareCheck.checked = false) : (compareCheck.checked = true);
 
     if (compareCheck.checked) {
       //on
@@ -216,7 +219,7 @@
         weatherIcon.src = `${src}rain.svg`;
         break;
       case '10d': //day: light rain
-        weatherIcon.src = `${src}rain-sun.svg`;
+        weatherIcon.src = `${src}rain-cloud-sun.svg`;
         break;
       case '10n': //night: light rain
         weatherIcon.src = `${src}rain.svg`;
@@ -266,7 +269,6 @@
     // TIME
     const thisTime = document.querySelector(`#thisTime${id}`);
     const date = new Date();
-    const day = date.getDate();
     let hours = date.getHours();
     let minutes = date.getMinutes();
     minutes < 10 ? (minutes = `0${minutes}`) : '';
@@ -277,13 +279,12 @@
     thisCity.textContent = cityName;
     // Probability RAIN
     const probRain = document.querySelector(`#probRain${id}`);
-    probRain.textContent = data.list[0].pop * 100;
-    probRain.title = `There is a ${
-      data.list[0].pop * 100
-    }% chance of rain in ${cityName}`;
+    const probRainCalc = (data.list[0].pop * 100).toFixed(0);
+    probRain.textContent = probRainCalc;
+    probRain.title = `There is a ${probRainCalc}% chance of rain in ${cityName}`;
     // Probability CLOUDS
     const probCloud = document.querySelector(`#probCloud${id}`);
-    const probCld = data.list[0].clouds.all;
+    const probCld = data.list[0].clouds.all.toFixed(0);
     probCloud.textContent = probCld;
     probCloud.title = `${probCld}% of the sky in ${cityName} is covered by clouds`;
     // HUMIDITY
@@ -331,7 +332,9 @@
     data.list.forEach((interval, i) => {
       // Get Date/Time
       const time = interval.dt_txt;
-      const date = new Date(time);
+      const adaptTime = time.replace(' ', 'T');
+      const date = new Date(adaptTime);
+      // console.log(date, 'new date');
       let day = date.getDay();
       let fullDay;
       let hours = date.getHours();
@@ -407,10 +410,10 @@
             <p>${hours}</p>
           </div>
           <img src="${source}" class="w-8 mx-auto" alt="${description} icon" title="${description} on ${day} at ${hours}" />
-          <p class="text-lg" title="It will be ${temp} Celsius at ${hours} in ${cityName}">${temp}</p>
+          <p class="text-lg" title="${temp} Celsius at ${hours} ${fullDay} in ${cityName}">${temp}</p>
           <div class="hidden text-gray-400 sm:block">
-            <p title="There is ${probRain}% change of rain on ${fullDay} around ${hours} in ${cityName}">${probRain}</p>
-            <p title="The wind at ${fullDay} around ${hours} in ${cityName} will blow ${windPos} at ${windSpeed}m/s">${windSpeed.toFixed(
+            <p title="${probRain}% chance of rain at ${hours} ${fullDay} in ${cityName}">${probRain}</p>
+            <p title="Wind ${windSpeed}m/s, from ${windPos}, at ${hours} ${fullDay} in ${cityName}">${windSpeed.toFixed(
         1
       )}</p>
           </div>
