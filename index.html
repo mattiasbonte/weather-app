@@ -32,6 +32,7 @@
     <script src="scripts/chart.js" defer></script>
     <script src="scripts/places.js" defer></script>
     <script src="scripts/search.js" defer></script>
+    <script src="scripts/photo.js" defer></script>
   </head>
 
   <body class="container box-border p-2 mx-auto prose bg-gray-300">
@@ -67,7 +68,7 @@
       <div id="compareLeft">
         <div
           id="inputDivLeft"
-          class="relative p-5 mx-auto mb-16 bg-gray-100 border rounded-lg shadow-md sm:max-w-sm sm:mb-32 hover:shadow-lg"
+          class="relative max-w-sm p-5 mx-auto mb-16 bg-gray-100 border rounded-lg shadow-md sm:mb-32 hover:shadow-lg"
         >
           <div
             class="flex flex-wrap items-center justify-between py-2 border-b border-teal-500"
@@ -394,7 +395,45 @@
       </div>
     </main>
 
-    <aside class=""></aside>
+    <!-- IMAGE BAR -->
+    <aside class="absolute top-0 left-0 w-3/12">
+      <div class="">
+        <figure>
+          <figcaption id="imgCityName">City Name</figcaption>
+          <img
+            id="randomCityImg"
+            src="https://images.unsplash.com/photo-1597378609416-47cc937b294c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2000&q=80"
+            alt="Random City Image"
+            title="Random City Image"
+          />
+        </figure>
+      </div>
+    </aside>
+
+    <!-- ALERT BOX -->
+    <div
+      id="alertDiv"
+      class="sticky bottom-0 hidden max-w-xl mx-auto text-white duration-1000 ease-linear transform bg-blue-700 border border-white rounded-lg shadow-md"
+    >
+      <div class="p-4 rounded-md">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="flex-1 ml-3 md:flex md:justify-between">
+            <p id="alertMessage" class="text-sm leading-5">
+              Text Placeholder
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <footer class="">
       <!-- WEATHER FORECAST ICON PACK

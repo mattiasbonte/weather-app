@@ -5,9 +5,7 @@
     container: document.querySelector('#inputLeft'),
     templates: {
       value: function (suggestion) {
-        return `<i class="flag ${suggestion.countryCode}"></i> ${
-          suggestion.name
-        }, ${suggestion.countryCode.toUpperCase()}`;
+        return `${suggestion.name}, ${suggestion.countryCode.toUpperCase()}`;
       },
     },
   }).configure({
@@ -20,9 +18,7 @@
     container: document.querySelector('#inputRight'),
     templates: {
       value: function (suggestion) {
-        return `<i class="flag${suggestion.countryCode}"></i> ${
-          suggestion.name
-        }, ${suggestion.countryCode.toUpperCase()}`;
+        return `${suggestion.name}, ${suggestion.countryCode.toUpperCase()}`;
       },
     },
   }).configure({

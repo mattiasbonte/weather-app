@@ -1,5 +1,10 @@
 (async () => {
   //---------//
+  // GLOBALS //
+  //---------//
+  let alertBoxClick = 1;
+
+  //---------//
   // ON LOAD //
   //---------//
   // User can press enter to submit both inputs
@@ -17,11 +22,6 @@
     getCity('#inputRight');
   }
 
-  //---------//
-  // ON TYPE //
-  //---------//
-  // TODO: Autocomplete.js the city.list.json
-
   //----------//
   // HANDLERS //
   //----------//
@@ -34,7 +34,6 @@
     const weather = getWeather(city, country).catch(error);
     const forecast = getForecast(city, country).catch(error);
     printTemp(weather, forecast, 'Left');
-    let alertArray = [];
   };
   // Handle RIGHT submit button
   document.querySelector('#submitRight').onclick = () => {
@@ -45,7 +44,6 @@
     const weather = getWeather(city, country).catch(error);
     const forecast = getForecast(city, country).catch(error);
     printTemp(weather, forecast, 'Right');
-    let alertArray = [];
   };
   // Compare ON/OFF
   document.querySelector('#compareControl').onclick = () => {
@@ -67,8 +65,8 @@
     }
   }
   // Get previous city from local storage
-  function setCity(city, id) {
-    localStorage.setItem(`Prev City ${id}`, city);
+  function setCity(city, country, id) {
+    localStorage.setItem(`Prev City ${id}`, `${city}, ${country}`);
   }
   // Handle enter key push
   function pushEnter() {
@@ -90,22 +88,22 @@
       deg.push(i * 22.5 + 11.25);
     }
     const direction = [
-      'N',
-      'NNE',
-      'NE',
-      'ENE',
-      'E',
-      'ESE',
-      'SE',
-      'SSE',
-      'S',
-      'SSW',
-      'SW',
-      'WSW',
-      'W',
-      'WNW',
-      'NW',
-      'NNW',
+      'North',
+      'North North East',
+      'Nort Eeast',
+      'East North East',
+      'East',
+      'East South East',
+      'South East',
+      'South South East',
+      'South',
+      'South South West',
+      'South West',
+      'West South West',
+      'West',
+      'West North West',
+      'North West',
+      'North North West',
     ];
     let windDir;
     for (let i = 0; i < deg.length; i++) {
@@ -129,8 +127,19 @@
       clearTimeout(timeout);
     }, 1520);
   }
+  function animAlert(message) {
+    const alertDiv = document.querySelector('#alertDiv');
 
-  // Compare Button
+    if (alertBoxClick === 1) {
+      alertDiv.classList.remove('hidden');
+      alertBoxClick = 0;
+    } else {
+      alertDiv.classList.add('hidden');
+      alertBoxClick = 1;
+    }
+  }
+
+  // CONTROL SECTION
   function animCompare() {
     // audio
     const audioWhoop = new Audio('audio/whoop.mp3');
@@ -151,8 +160,8 @@
       //on
       compareControl.classList.remove('bg-blue-500', 'border-white');
       compareControl.classList.add('bg-green-500', 'border-black');
-      main.classList.add('grid', 'grid-cols-2', 'gap-6');
-      compareRight.classList.remove('hidden');
+      main.classList.add('md:grid', 'md:grid-cols-2', 'md:gap-4');
+      compareRight.classList.add('md:inline');
       iconLeft.classList.remove('sm:-translate-y-24', 'sm:w-40');
       iconLeft.classList.add('lg:-translate-y-24', 'lg:w-40');
       iconRight.classList.remove('sm:-translate-y-24', 'sm:w-40');
@@ -161,8 +170,8 @@
       //off
       compareControl.classList.remove('bg-green-500', 'border-black');
       compareControl.classList.add('bg-blue-500', 'border-white');
-      main.classList.remove('grid', 'grid-cols-2', 'gap-6');
-      compareRight.classList.add('hidden');
+      main.classList.remove('md:grid', 'md:grid-cols-2', 'md:gap-4');
+      compareRight.classList.remove('md:inline');
       iconLeft.classList.remove('lg:-translate-y-24', 'lg:w-40');
       iconLeft.classList.add('sm:-translate-y-24', 'sm:w-40');
       iconRight.classList.remove('lg:-translate-y-24', 'lg:w-40');
@@ -226,7 +235,8 @@
 
     // City Name
     const cityName = weatherData.name;
-    setCity(cityName, id);
+    const countryCode = weatherData.sys.country;
+    setCity(cityName, countryCode, id);
 
     // Show WeatherBox
     const weatherBox = document.querySelector(`#weatherBox${id}`).classList;
@@ -296,7 +306,9 @@
         break;
     }
 
-    // Print CURRENT [0] //
+    // ============================= //
+    // Print CURRENT WEATHER SECTION //
+    // ============================= //
     // TEMPS
     const temp = document.querySelector(`#temp${id}`);
     const currentTemp = `${(weatherData.main.temp - 273).toFixed(0)}°`;
@@ -378,6 +390,10 @@
     // ===================== //
     // Print FORECAST [1-39] //
     // ===================== //
+
+    // Make individual alert Messages possible
+    let alertMessage = [];
+
     const forecastDiv = document.querySelector(`#forecast${id}`);
     let forecastPrint = '';
     forecastData.list.forEach((interval, i) => {
@@ -454,7 +470,7 @@
       const segment = `
         <!-- 3H SEGMENT #${i + 1} -->
         <div
-          class="segment${id} grid items-center grid-cols-1 grid-rows-2 p-3 m-1 bg-gray-900 border border-gray-600 rounded-lg shadow sm:grid-rows-4 cursor-pointer"
+          class="segment${id} grid items-center grid-cols-1 grid-rows-2 p-3 m-1 bg-gray-900 border border-gray-600 rounded-lg shadow cursor-pointer"
         >
           <div class="text-gray-500">
             <p>${day}</p>
@@ -462,36 +478,31 @@
           </div>
           <img src="${source}" class="w-8 mx-auto" alt="${description} icon" title="${description} on ${day} at ${hours}" />
           <p class="text-lg" title="${temp} Celsius at ${fullDay} ${hours} in ${cityName}">${temp}</p>
-          <div class="hidden text-gray-400 sm:block">
-            <p title="${probRain}% chance of rain at ${fullDay} ${hours} in ${cityName}">${probRain}</p>
-            <p title="Wind ${windSpeed}m/s, from ${windPos}, at ${fullDay} ${hours} in ${cityName}">${windSpeed.toFixed(
-        1
-      )}</p>
-          </div>
         </div>
         `;
       forecastPrint += segment;
 
       // Create Descriptive text for each segment
-      const describeSegment = `On ${fullDay} at ${hours} temperature will be ${temp} Celsius. Chance of rain is ${probRain}%. Wind blows from ${windPos} at ${windSpeed}. We have ${description}`;
-      // alertArray.id.push(describeSegment);
+      const describeSegment = `
+      <div class="flex flex-wrap">
+        <p class="mx-2">${fullDay} ${hours}.</p><p class="mx-2"><b>${temp}</b> and ${description}.</p><p class="mx-2"><b>${windPos}er</b> wind, <b>${windSpeed}m/s</b>.</p>
+      </div>`;
+      alertMessage.push(describeSegment);
     });
     // Add all Segments to html
     forecastDiv.innerHTML = forecastPrint;
 
     // Click Info Box Per Segment
     const allSegments = document.querySelectorAll(`.segment${id}`);
+    const alertMsg = document.querySelector('#alertMessage');
     allSegments.forEach((segment, i) =>
       segment.addEventListener('click', () => {
-        // const alertText = alertArray[i];
-        // alert(alertText);
-        console.log(`test${id}`, i);
+        alertMsg.innerHTML = alertMessage[i];
+        animAlert(alertMessage[i]);
       })
     );
   }
 
-  // TODO: AUTOCOMPLETE CITY NAMES
-  // TODO: If autocomplete works, find a way to add country?
   // TODO: Display line graph of temp over time chart.js
   // PHOTO
   // TODO: use unsplash.com to show photo of requested city
