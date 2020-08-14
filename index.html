@@ -32,7 +32,6 @@
     <script src="scripts/chart.js" defer></script>
     <script src="scripts/places.js" defer></script>
     <script src="scripts/search.js" defer></script>
-    <script src="scripts/photo.js" defer></script>
   </head>
 
   <body class="container box-border p-2 mx-auto prose bg-gray-300">
@@ -50,6 +49,18 @@
           </p>
           <input id="compareCheck" class="hidden cursor-pointer" type="checkbox" />
         </div>
+
+        <div
+          id="photosControl"
+          class="hidden p-2 px-4 m-2 bg-blue-500 border border-white rounded-full shadow-md cursor-pointer md:inline"
+          title="See local photo's of the city!"
+        >
+          <p class="inline mr-1 text-white">
+            photos
+          </p>
+          <input id="photosCheck" class="hidden cursor-pointer" type="checkbox" />
+        </div>
+
         <div
           id="chartControl"
           class="hidden p-2 px-4 m-2 bg-blue-500 border border-white rounded-full shadow-md cursor-pointer md:inline"
@@ -393,22 +404,12 @@
           ></div>
         </div>
       </div>
+
+      <!-- IMAGE BAR -->
+      <div id="photosBox" class="hidden"></div>
     </main>
 
-    <!-- IMAGE BAR -->
-    <aside class="absolute top-0 left-0 w-3/12">
-      <div class="">
-        <figure>
-          <figcaption id="imgCityName">City Name</figcaption>
-          <img
-            id="randomCityImg"
-            src="https://images.unsplash.com/photo-1597378609416-47cc937b294c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2000&q=80"
-            alt="Random City Image"
-            title="Random City Image"
-          />
-        </figure>
-      </div>
-    </aside>
+    <aside></aside>
 
     <!-- ALERT BOX -->
     <div

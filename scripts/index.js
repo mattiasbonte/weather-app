@@ -12,7 +12,9 @@
 
   // Uncheck check boxes
   const compareCheck = document.querySelector('#compareCheck');
+  const chartCheck = document.querySelector('#chartCheck');
   compareCheck.checked = false;
+  chartCheck.checked = false;
 
   // Check previous city, if set, add to input field
   if (localStorage.getItem('Prev City Left') !== null) {
@@ -30,10 +32,13 @@
     animInput('#inputDivLeft');
     const input = document.querySelector('#inputLeft').value;
     const country = input.split(',').pop();
+    const cityName = input.split(',').shift();
     const city = document.querySelector('#inputLeft').value;
+    const photos = getPhoto(cityName);
     const weather = getWeather(city, country).catch(error);
     const forecast = getForecast(city, country).catch(error);
     printTemp(weather, forecast, 'Left');
+    printPhotos(photos);
   };
   // Handle RIGHT submit button
   document.querySelector('#submitRight').onclick = () => {
@@ -49,10 +54,50 @@
   document.querySelector('#compareControl').onclick = () => {
     animCompare();
   };
+  // Photos ON/OFF
+  document.querySelector('#photosControl').onclick = () => {
+    animPhotos();
+  };
   // Chart ON/OFF
   document.querySelector('#chartControl').onclick = () => {
     animChart();
   };
+
+  // ========== //
+  // FETCH DATA //
+  // ========== //
+  async function getWeather(city, country) {
+    const apiKey = '16b8985dd4d01e5dda0af6d392345499';
+    const countryCode = country;
+    const weatherFetch = `https://api.openweathermap.org/data/2.5/weather?q=${city},${countryCode}&appid=${apiKey}`;
+    // this gets the data from now for a specific city
+    const response = await fetch(weatherFetch);
+    return response.json();
+  }
+  async function getForecast(city, country) {
+    const apiKey = '16b8985dd4d01e5dda0af6d392345499';
+    const countryCode = country;
+    const forecastFetch = `https://api.openweathermap.org/data/2.5/forecast?q=${city},${countryCode}&appid=${apiKey}`;
+    // this gets the data from every 3 hours for the next 5 days, (24/3)*5= 40 data points
+    const response = await fetch(forecastFetch);
+    return response.json();
+  }
+
+  async function getPhoto(cityName) {
+    const apiKey = 'fT0XySJ5M9TWNQrMTeoMCTT4evMzdUy7Pb3fDGVj3gk';
+    const city = cityName.replace(' ', '%20');
+    const photoFetch = `https://api.unsplash.com/photos/random?client_id=${apiKey}&query=${city}&orientation=squarish&count=5`;
+    console.log(
+      `https://api.unsplash.com/photos/random?client_id=${apiKey}&query=${city}&orientation=landscape`
+    );
+    const response = await fetch(photoFetch);
+    return response.json();
+  }
+
+  async function error(error) {
+    await error;
+    console.error(error);
+  }
 
   //-----------//
   // FUNCTIONS //
@@ -81,7 +126,7 @@
     });
   }
 
-  // WIND directional notation (N,NNE,NE...)
+  // WIND directional notation (North ,NNE,NE...)
   function windDir(windDegree) {
     let deg = [0];
     for (let i = 0; i < 16; i++) {
@@ -127,15 +172,22 @@
       clearTimeout(timeout);
     }, 1520);
   }
+  // Alert Box
   function animAlert(message) {
     const alertDiv = document.querySelector('#alertDiv');
-
+    let interval;
     if (alertBoxClick === 1) {
       alertDiv.classList.remove('hidden');
       alertBoxClick = 0;
+      interval = setInterval(() => {
+        alertDiv.classList.add('hidden');
+        alertBoxClick = 1;
+        clearInterval(interval);
+      }, 7000);
     } else {
       alertDiv.classList.add('hidden');
       alertBoxClick = 1;
+      clearInterval(interval);
     }
   }
 
@@ -179,6 +231,34 @@
     }
   }
 
+  function animPhotos() {
+    // audio
+    const audioWhoop = new Audio('audio/whoop.mp3');
+    audioWhoop.play();
+
+    const main = document.querySelector('main');
+    const photosBox = document.querySelector('#photosBox');
+    const photosControl = document.querySelector('#photosControl');
+    const photosCheck = document.querySelector('#photosCheck');
+
+    // Toggle checkbox on click
+    photosCheck.checked ? (photosCheck.checked = false) : (photosCheck.checked = true);
+
+    if (photosCheck.checked) {
+      //on
+      photosControl.classList.remove('bg-blue-500', 'border-white');
+      photosControl.classList.add('bg-green-500', 'border-black');
+      main.classList.add('md:grid', 'md:grid-cols-2', 'md:gap-4');
+      photosBox.classList.add('md:inline');
+    } else {
+      //off
+      photosControl.classList.remove('bg-green-500', 'border-black');
+      photosControl.classList.add('bg-blue-500', 'border-white');
+      main.classList.remove('md:grid', 'md:grid-cols-2', 'md:gap-4');
+      photosBox.classList.remove('md:inline');
+    }
+  }
+
   function animChart() {
     // audio
     const audioWhoop = new Audio('audio/whoop.mp3');
@@ -201,33 +281,10 @@
     }
   }
 
-  // ========== //
-  // FETCH DATA //
-  // ========== //
-  async function getWeather(city, country) {
-    const apiKey = '16b8985dd4d01e5dda0af6d392345499';
-    const countryCode = country;
-    const weatherCall = `https://api.openweathermap.org/data/2.5/weather?q=${city},${countryCode}&appid=${apiKey}`;
-    // this gets the data from now for a specific city
-    const response = await fetch(weatherCall);
-    return response.json();
-  }
-  async function getForecast(city, country) {
-    const apiKey = '16b8985dd4d01e5dda0af6d392345499';
-    const countryCode = country;
-    const weatherCall = `https://api.openweathermap.org/data/2.5/forecast?q=${city},${countryCode}&appid=${apiKey}`;
-    // this gets the data from every 3 hours for the next 5 days, (24/3)*5= 40 data points
-    const response = await fetch(weatherCall);
-    return response.json();
-  }
-  async function error(error) {
-    await error;
-    console.error(error);
-  }
-
   // ============= //
   // PRINTING HTML //
   // ============= //
+  // PRINT WEATHER & FORECAST
   async function printTemp(weather, forecast, id) {
     // Wait for Data from API
     const weatherData = await weather;
@@ -503,9 +560,26 @@
     );
   }
 
-  // TODO: Display line graph of temp over time chart.js
-  // PHOTO
-  // TODO: use unsplash.com to show photo of requested city
+  // PRINT PHOTO
+  async function printPhotos(photos) {
+    const photoData = await photos;
+    const photoBox = document.querySelector('#photoBox');
+    let photoInject = '';
+    console.log(photoData, 'photoData');
+    photoData.forEach((pics, i) => {
+      const photo = pics.urls.regular;
+      const alt = pics.alt_description;
+      const html = `
+        <img
+          src="${photo}"
+          alt="${alt}"
+          title="${alt}"
+        />
+      `;
+      photoInject += html;
+    });
+    photoBox.innerHTML = photoInject;
+  }
 
   //
 })();
