@@ -40,9 +40,20 @@
     <nav class="">
       <div id="controlsDiv" class="flex justify-center mb-5 align-middle">
         <div
+          id="forecastControl"
+          class="hidden p-2 px-4 m-2 bg-blue-500 border border-white rounded-full shadow-md cursor-pointer md:inline"
+          title="See the 5 day forecast"
+        >
+          <p class="inline mr-1 text-white">
+            forecast
+          </p>
+          <input id="forecastCheck" class="hidden cursor-pointer" type="checkbox" />
+        </div>
+
+        <div
           id="compareControl"
           class="hidden p-2 px-4 m-2 bg-blue-500 border border-white rounded-full shadow-md cursor-pointer md:inline"
-          title="Compare 2 cities next to one another!"
+          title="Compare 2 cities next to each other."
         >
           <p class="inline mr-1 text-white">
             compare
@@ -53,23 +64,12 @@
         <div
           id="photosControl"
           class="hidden p-2 px-4 m-2 bg-blue-500 border border-white rounded-full shadow-md cursor-pointer md:inline"
-          title="See local photo's of the city!"
+          title="See local photo's of the city."
         >
           <p class="inline mr-1 text-white">
             photos
           </p>
           <input id="photosCheck" class="hidden cursor-pointer" type="checkbox" />
-        </div>
-
-        <div
-          id="chartControl"
-          class="hidden p-2 px-4 m-2 bg-blue-500 border border-white rounded-full shadow-md cursor-pointer md:inline"
-          title="Compare 2 cities next to one another!"
-        >
-          <p class="inline mr-1 text-white">
-            chart
-          </p>
-          <input id="chartCheck" class="hidden cursor-pointer" type="checkbox" />
         </div>
       </div>
     </nav>
@@ -79,7 +79,7 @@
       <div id="compareLeft">
         <div
           id="inputDivLeft"
-          class="relative max-w-sm p-5 mx-auto mb-16 bg-gray-100 border rounded-lg shadow-md sm:mb-32 hover:shadow-lg"
+          class="relative max-w-sm p-5 mx-auto mb-16 bg-gray-100 border rounded-lg shadow-md sm:mb-32 lg:mb-32 hover:shadow-lg"
         >
           <div
             class="flex flex-wrap items-center justify-between py-2 border-b border-teal-500"
@@ -100,7 +100,7 @@
           </div>
         </div>
 
-        <div id="weatherBoxLeft" class="relative hidden my-3">
+        <div id="weatherBoxLeft" class="relative hidden">
           <!-- WEATHER ICON -->
           <img
             id="weatherIconLeft"
@@ -235,7 +235,7 @@
           <!-- FORECAST -->
           <div
             id="forecastLeft"
-            class="flex flex-wrap justify-between max-w-xl p-4 mx-auto mt-6 text-xs text-center text-white bg-gray-800 rounded-lg shadow-md"
+            class="flex-wrap justify-between hidden max-w-xl p-4 mx-auto mt-6 text-xs text-center text-white bg-gray-800 rounded-lg shadow-md"
           ></div>
         </div>
       </div>
@@ -244,7 +244,7 @@
       <div id="compareRight" class="hidden">
         <div
           id="inputDivRight"
-          class="relative p-5 mx-auto mb-16 bg-gray-100 border rounded-lg shadow-md sm:max-w-sm sm:mb-32 hover:shadow-lg"
+          class="relative p-5 mx-auto mb-16 bg-gray-100 border rounded-lg shadow-md sm:max-w-sm sm:mb-32 lg:mb-32 hover:shadow-lg"
         >
           <div
             class="flex flex-wrap items-center justify-between py-2 border-b border-teal-500"
@@ -265,7 +265,7 @@
           </div>
         </div>
 
-        <div id="weatherBoxRight" class="relative hidden my-3">
+        <div id="weatherBoxRight" class="relative hidden">
           <!-- WEATHER ICON -->
           <img
             id="weatherIconRight"
@@ -400,13 +400,16 @@
           <!-- FORECAST -->
           <div
             id="forecastRight"
-            class="flex flex-wrap justify-between max-w-xl p-4 mx-auto mt-6 text-xs text-center text-white bg-gray-800 rounded-lg shadow-md"
+            class="flex-wrap justify-between hidden max-w-xl p-4 mx-auto mt-6 text-xs text-center text-white bg-gray-800 rounded-lg shadow-md"
           ></div>
         </div>
       </div>
 
       <!-- IMAGE BAR -->
-      <div id="photosBox" class="hidden"></div>
+      <div
+        id="photosBox"
+        class="items-stretch hidden gap-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
+      ></div>
     </main>
 
     <aside></aside>
@@ -414,7 +417,7 @@
     <!-- ALERT BOX -->
     <div
       id="alertDiv"
-      class="sticky bottom-0 hidden max-w-xl mx-auto text-white duration-1000 ease-linear transform bg-blue-700 border border-white rounded-lg shadow-md"
+      class="sticky bottom-0 hidden max-w-xl m-2 mx-auto text-white duration-1000 ease-linear transform bg-blue-700 border border-white rounded-lg shadow-md cursor-pointer"
     >
       <div class="p-4 rounded-md">
         <div class="flex">
@@ -429,7 +432,7 @@
           </div>
           <div class="flex-1 ml-3 md:flex md:justify-between">
             <p id="alertMessage" class="text-sm leading-5">
-              Text Placeholder
+              Alert Placeholder
             </p>
           </div>
         </div>
@@ -437,17 +440,57 @@
     </div>
 
     <footer class="">
-      <!-- WEATHER FORECAST ICON PACK
-      <a href="https://www.flaticon.com/authors/linector" title="Linector">Linector</a>
-      from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+      <div
+        class="max-w-screen-xl px-4 py-12 mx-auto sm:px-6 md:flex md:items-center md:justify-between lg:px-8"
+      >
+        <div class="mt-8 md:mt-0 md:order-1">
+          <p class="text-base leading-6 text-center text-gray-500">
+            &copy; 2020 WiseCoding, MIT License.
+          </p>
+        </div>
 
-      WEATHER GOODWARE
-      <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a>
-      from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+        <!-- FLATICONS -->
+        <div class="flex justify-center md:order-2">
+          <a
+            title="Good Ware - www.flaticon.com"
+            href="https://www.flaticon.com/authors/good-ware"
+            class="ml-6 text-gray-400 hover:text-gray-500"
+          >
+            <span class="sr-only">FlatIcon</span>
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </a>
 
-      WEATHER ICON
-      <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from
-      <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> -->
+          <!-- GITHUB -->
+          <a
+            title="View the source code!"
+            href="https://github.com/WiseCoding/weather-app"
+            class="ml-6 text-gray-400 hover:text-gray-500"
+          >
+            <span class="sr-only">GitHub</span>
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                fill-rule="evenodd"
+                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
     </footer>
   </body>
 </html>

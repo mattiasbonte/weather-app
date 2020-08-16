@@ -11,10 +11,12 @@
   pushEnter();
 
   // Uncheck check boxes
+  const forecastCheck = document.querySelector('#forecastCheck');
   const compareCheck = document.querySelector('#compareCheck');
-  const chartCheck = document.querySelector('#chartCheck');
+  const photosCheck = document.querySelector('#photosCheck');
+  forecastCheck.checked = false;
   compareCheck.checked = false;
-  chartCheck.checked = false;
+  photosCheck.checked = false;
 
   // Check previous city, if set, add to input field
   if (localStorage.getItem('Prev City Left') !== null) {
@@ -34,7 +36,7 @@
     const country = input.split(',').pop();
     const cityName = input.split(',').shift();
     const city = document.querySelector('#inputLeft').value;
-    const photos = getPhoto(cityName);
+    const photos = getPhotos(cityName);
     const weather = getWeather(city, country).catch(error);
     const forecast = getForecast(city, country).catch(error);
     printTemp(weather, forecast, 'Left');
@@ -50,6 +52,10 @@
     const forecast = getForecast(city, country).catch(error);
     printTemp(weather, forecast, 'Right');
   };
+  // Chart ON/OFF
+  document.querySelector('#forecastControl').onclick = () => {
+    animForecast();
+  };
   // Compare ON/OFF
   document.querySelector('#compareControl').onclick = () => {
     animCompare();
@@ -58,9 +64,11 @@
   document.querySelector('#photosControl').onclick = () => {
     animPhotos();
   };
-  // Chart ON/OFF
-  document.querySelector('#chartControl').onclick = () => {
-    animChart();
+  // Handle AlertBox Click
+  document.querySelector('#alertDiv').onclick = () => {
+    const alert = document.querySelector('#alertDiv');
+    alert.classList.add('hidden');
+    alertBoxClick = 1;
   };
 
   // ========== //
@@ -83,13 +91,10 @@
     return response.json();
   }
 
-  async function getPhoto(cityName) {
+  async function getPhotos(cityName) {
     const apiKey = 'fT0XySJ5M9TWNQrMTeoMCTT4evMzdUy7Pb3fDGVj3gk';
     const city = cityName.replace(' ', '%20');
-    const photoFetch = `https://api.unsplash.com/photos/random?client_id=${apiKey}&query=${city}&orientation=squarish&count=5`;
-    console.log(
-      `https://api.unsplash.com/photos/random?client_id=${apiKey}&query=${city}&orientation=landscape`
-    );
+    const photoFetch = `https://api.unsplash.com/photos/random?client_id=${apiKey}&query=${city}&orientation=squarish&count=9`;
     const response = await fetch(photoFetch);
     return response.json();
   }
@@ -175,23 +180,49 @@
   // Alert Box
   function animAlert(message) {
     const alertDiv = document.querySelector('#alertDiv');
-    let interval;
     if (alertBoxClick === 1) {
       alertDiv.classList.remove('hidden');
       alertBoxClick = 0;
-      interval = setInterval(() => {
-        alertDiv.classList.add('hidden');
-        alertBoxClick = 1;
-        clearInterval(interval);
-      }, 7000);
-    } else {
-      alertDiv.classList.add('hidden');
-      alertBoxClick = 1;
-      clearInterval(interval);
     }
   }
 
   // CONTROL SECTION
+  function animForecast() {
+    // audio
+    const audioWhoop = new Audio('audio/whoop.mp3');
+    audioWhoop.play();
+
+    const forecastControl = document.querySelector('#forecastControl');
+    const forecastCheck = document.querySelector('#forecastCheck');
+    const forecastBoxLeft = document.querySelector('#forecastLeft');
+    const forecastBoxRight = document.querySelector('#forecastRight');
+
+    // Toggle checkbox on click
+    forecastCheck.checked
+      ? (forecastCheck.checked = false)
+      : (forecastCheck.checked = true);
+
+    if (forecastCheck.checked) {
+      //on
+      console.log('on');
+      forecastControl.classList.remove('bg-blue-500', 'border-white');
+      forecastControl.classList.add('bg-green-500', 'border-black');
+      forecastBoxLeft.classList.remove('hidden');
+      forecastBoxLeft.classList.add('flex');
+      forecastBoxRight.classList.remove('hidden');
+      forecastBoxRight.classList.add('flex');
+    } else {
+      //off
+      console.log('off');
+      forecastControl.classList.remove('bg-green-500', 'border-black');
+      forecastControl.classList.add('bg-blue-500', 'border-white');
+      forecastBoxLeft.classList.remove('flex');
+      forecastBoxLeft.classList.add('hidden');
+      forecastBoxRight.classList.remove('flex');
+      forecastBoxRight.classList.add('hidden');
+    }
+  }
+
   function animCompare() {
     // audio
     const audioWhoop = new Audio('audio/whoop.mp3');
@@ -204,6 +235,9 @@
     const compareCheck = document.querySelector('#compareCheck');
     const iconLeft = document.querySelector('#weatherIconLeft');
     const iconRight = document.querySelector('#weatherIconRight');
+    const inputDivLeft = document.querySelector('#inputDivLeft');
+    const inputDivRight = document.querySelector('#inputDivRight');
+    const photosControl = document.querySelector('#photosControl');
 
     // Toggle checkbox on click
     compareCheck.checked ? (compareCheck.checked = false) : (compareCheck.checked = true);
@@ -218,6 +252,9 @@
       iconLeft.classList.add('lg:-translate-y-24', 'lg:w-40');
       iconRight.classList.remove('sm:-translate-y-24', 'sm:w-40');
       iconRight.classList.add('lg:-translate-y-24', 'lg:w-40');
+      inputDivLeft.classList.remove('sm:mb-32');
+      inputDivRight.classList.remove('sm:mb-32');
+      photosControl.classList.remove('md:inline');
     } else {
       //off
       compareControl.classList.remove('bg-green-500', 'border-black');
@@ -228,6 +265,9 @@
       iconLeft.classList.add('sm:-translate-y-24', 'sm:w-40');
       iconRight.classList.remove('lg:-translate-y-24', 'lg:w-40');
       iconRight.classList.add('sm:-translate-y-24', 'sm:w-40');
+      inputDivLeft.classList.add('sm:mb-32');
+      inputDivRight.classList.add('sm:mb-32');
+      photosControl.classList.add('md:inline');
     }
   }
 
@@ -240,6 +280,7 @@
     const photosBox = document.querySelector('#photosBox');
     const photosControl = document.querySelector('#photosControl');
     const photosCheck = document.querySelector('#photosCheck');
+    const compareControl = document.querySelector('#compareControl');
 
     // Toggle checkbox on click
     photosCheck.checked ? (photosCheck.checked = false) : (photosCheck.checked = true);
@@ -249,35 +290,15 @@
       photosControl.classList.remove('bg-blue-500', 'border-white');
       photosControl.classList.add('bg-green-500', 'border-black');
       main.classList.add('md:grid', 'md:grid-cols-2', 'md:gap-4');
-      photosBox.classList.add('md:inline');
+      photosBox.classList.add('md:grid');
+      compareControl.classList.remove('md:inline');
     } else {
       //off
       photosControl.classList.remove('bg-green-500', 'border-black');
       photosControl.classList.add('bg-blue-500', 'border-white');
       main.classList.remove('md:grid', 'md:grid-cols-2', 'md:gap-4');
-      photosBox.classList.remove('md:inline');
-    }
-  }
-
-  function animChart() {
-    // audio
-    const audioWhoop = new Audio('audio/whoop.mp3');
-    audioWhoop.play();
-
-    const chartControl = document.querySelector('#chartControl');
-    const chartCheck = document.querySelector('#chartCheck');
-
-    // Toggle checkbox on click
-    chartCheck.checked ? (chartCheck.checked = false) : (chartCheck.checked = true);
-
-    if (chartCheck.checked) {
-      //on
-      chartControl.classList.remove('bg-blue-500', 'border-white');
-      chartControl.classList.add('bg-green-500', 'border-black');
-    } else {
-      //off
-      chartControl.classList.remove('bg-green-500', 'border-black');
-      chartControl.classList.add('bg-blue-500', 'border-white');
+      photosBox.classList.remove('md:grid');
+      compareControl.classList.add('md:inline');
     }
   }
 
@@ -438,7 +459,7 @@
     const statusIcon = document.querySelector(`#statusIcon${id}`);
     const description = weatherData.weather[0].description;
     status.textContent = description;
-    statusIcon.src = `https://openweathermap.org/img/w/${icon}.png`;
+    statusIcon.src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
     statusIcon.alt = `${description} icon`;
     statusIcon.title = `${description} in ${cityName}`;
     weatherIcon.alt = `${description} icon`;
@@ -458,7 +479,6 @@
       const time = interval.dt_txt;
       const adaptTime = time.replace(' ', 'T');
       const date = new Date(adaptTime);
-      // console.log(date, 'new date');
       let day = date.getDay();
       let fullDay;
       let hours = date.getHours();
@@ -521,13 +541,13 @@
       // Get Weather Icon
       const description = interval.weather[0].description;
       const icon = interval.weather[0].icon;
-      const source = `https://openweathermap.org/img/w/${icon}.png`;
+      const source = `https://openweathermap.org/img/wn/${icon}@2x.png`;
 
       // Print Segments Per Time Interval
       const segment = `
         <!-- 3H SEGMENT #${i + 1} -->
         <div
-          class="segment${id} grid items-center grid-cols-1 grid-rows-2 p-3 m-1 bg-gray-900 border border-gray-600 rounded-lg shadow cursor-pointer"
+          class="segment${id} grid items-center grid-cols-1 grid-rows-2 p-3 m-1 border border-gray-700 hover:bg-gray-900 hover:border-gray-600 rounded-lg shadow cursor-pointer"
         >
           <div class="text-gray-500">
             <p>${day}</p>
@@ -542,7 +562,7 @@
       // Create Descriptive text for each segment
       const describeSegment = `
       <div class="flex flex-wrap">
-        <p class="mx-2">${fullDay} ${hours}.</p><p class="mx-2"><b>${temp}</b> and ${description}.</p><p class="mx-2"><b>${windPos}er</b> wind, <b>${windSpeed}m/s</b>.</p>
+        <p class="mx-2"><i>${fullDay} ${hours} at ${cityName}:</i></p><p class="mx-2">Temperature ${temp} and ${description}.</p><p class="mx-2">${windPos}er wind, ${windSpeed}m/s.</p>
       </div>`;
       alertMessage.push(describeSegment);
     });
@@ -562,23 +582,24 @@
 
   // PRINT PHOTO
   async function printPhotos(photos) {
-    const photoData = await photos;
-    const photoBox = document.querySelector('#photoBox');
-    let photoInject = '';
-    console.log(photoData, 'photoData');
-    photoData.forEach((pics, i) => {
+    const photosData = await photos;
+    const photosBox = document.querySelector('#photosBox');
+    let photosInject = '';
+    photosData.forEach((pics, i) => {
       const photo = pics.urls.regular;
-      const alt = pics.alt_description;
+      let alt = pics.alt_description;
+      alt === null ? (alt = 'random unsplash image') : '';
       const html = `
         <img
           src="${photo}"
           alt="${alt}"
           title="${alt}"
+          class="object-cover max-h-xs border shadow-lg rounded-lg border-white"
         />
       `;
-      photoInject += html;
+      photosInject += html;
     });
-    photoBox.innerHTML = photoInject;
+    photosBox.innerHTML = photosInject;
   }
 
   //
