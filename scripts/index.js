@@ -36,11 +36,11 @@
     const country = input.split(',').pop();
     const cityName = input.split(',').shift();
     const city = document.querySelector('#inputLeft').value;
-    const photos = getPhotos(cityName);
+    const photos = getPhotos(cityName).catch(error);
     const weather = getWeather(city, country).catch(error);
     const forecast = getForecast(city, country).catch(error);
     printTemp(weather, forecast, 'Left');
-    printPhotos(photos);
+    printPhotos(photos, cityName);
   };
   // Handle RIGHT submit button
   document.querySelector('#submitRight').onclick = () => {
@@ -74,34 +74,35 @@
   // ========== //
   // FETCH DATA //
   // ========== //
+  async function error(error) {
+    await error;
+    console.error(error);
+  }
+
   async function getWeather(city, country) {
+    // Fetch current weather data for a specific city
     const apiKey = '16b8985dd4d01e5dda0af6d392345499';
     const countryCode = country;
     const weatherFetch = `https://api.openweathermap.org/data/2.5/weather?q=${city},${countryCode}&appid=${apiKey}`;
-    // this gets the data from now for a specific city
     const response = await fetch(weatherFetch);
     return response.json();
   }
+
   async function getForecast(city, country) {
+    // Fetch weather 5 day (3h interval) forecast data for a specific city (40 data points)
     const apiKey = '16b8985dd4d01e5dda0af6d392345499';
     const countryCode = country;
     const forecastFetch = `https://api.openweathermap.org/data/2.5/forecast?q=${city},${countryCode}&appid=${apiKey}`;
-    // this gets the data from every 3 hours for the next 5 days, (24/3)*5= 40 data points
     const response = await fetch(forecastFetch);
     return response.json();
   }
 
   async function getPhotos(cityName) {
     const apiKey = 'fT0XySJ5M9TWNQrMTeoMCTT4evMzdUy7Pb3fDGVj3gk';
-    const city = cityName.replace(' ', '%20');
+    const city = cityName.replace(/\s+/g, '%20'); // Change spaces in city name with %20
     const photoFetch = `https://api.unsplash.com/photos/random?client_id=${apiKey}&query=${city}&orientation=squarish&count=9`;
     const response = await fetch(photoFetch);
     return response.json();
-  }
-
-  async function error(error) {
-    await error;
-    console.error(error);
   }
 
   //-----------//
@@ -204,7 +205,6 @@
 
     if (forecastCheck.checked) {
       //on
-      console.log('on');
       forecastControl.classList.remove('bg-blue-500', 'border-white');
       forecastControl.classList.add('bg-green-500', 'border-black');
       forecastBoxLeft.classList.remove('hidden');
@@ -213,7 +213,6 @@
       forecastBoxRight.classList.add('flex');
     } else {
       //off
-      console.log('off');
       forecastControl.classList.remove('bg-green-500', 'border-black');
       forecastControl.classList.add('bg-blue-500', 'border-white');
       forecastBoxLeft.classList.remove('flex');
@@ -312,8 +311,8 @@
     const forecastData = await forecast;
 
     // City Name
-    const cityName = weatherData.name;
-    const countryCode = weatherData.sys.country;
+    const cityName = await weatherData.name;
+    const countryCode = await weatherData.sys.country;
     setCity(cityName, countryCode, id);
 
     // Show WeatherBox
@@ -322,7 +321,7 @@
 
     // WEATHER ICON SWAP
     const weatherIcon = document.querySelector(`#weatherIcon${id}`);
-    const icon = weatherData.weather[0].icon;
+    const icon = await weatherData.weather[0].icon;
     const src = 'images/status/';
     switch (icon) {
       case '01d': //day: clear sky
@@ -581,15 +580,17 @@
   }
 
   // PRINT PHOTO
-  async function printPhotos(photos) {
+  async function printPhotos(photos, city) {
     const photosData = await photos;
     const photosBox = document.querySelector('#photosBox');
     let photosInject = '';
-    photosData.forEach((pics, i) => {
-      const photo = pics.urls.regular;
-      let alt = pics.alt_description;
-      alt === null ? (alt = 'random unsplash image') : '';
-      const html = `
+
+    if (photosData.errors === undefined) {
+      photosData.forEach((pics, i) => {
+        const photo = pics.urls.regular;
+        let alt = pics.alt_description;
+        alt === null ? (alt = 'random unsplash image') : '';
+        const html = `
         <img
           src="${photo}"
           alt="${alt}"
@@ -597,9 +598,12 @@
           class="object-cover max-h-xs border shadow-lg rounded-lg border-white"
         />
       `;
-      photosInject += html;
-    });
-    photosBox.innerHTML = photosInject;
+        photosInject += html;
+      });
+      photosBox.innerHTML = photosInject;
+    } else {
+      photosBox.innerHTML = `<p class="shadow-md bg-gray-100 text-gray-700 text-center self-start p-8 border rounded-lg">${city} has no photo's available 😔</p>`;
+    }
   }
 
   //
