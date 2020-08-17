@@ -280,6 +280,7 @@
     const photosControl = document.querySelector('#photosControl');
     const photosCheck = document.querySelector('#photosCheck');
     const compareControl = document.querySelector('#compareControl');
+    const iconLeft = document.querySelector('#weatherIconLeft');
 
     // Toggle checkbox on click
     photosCheck.checked ? (photosCheck.checked = false) : (photosCheck.checked = true);
@@ -291,6 +292,8 @@
       main.classList.add('md:grid', 'md:grid-cols-2', 'md:gap-4');
       photosBox.classList.add('md:grid');
       compareControl.classList.remove('md:inline');
+      iconLeft.classList.remove('sm:-translate-y-24', 'sm:w-40');
+      iconLeft.classList.add('lg:-translate-y-24', 'lg:w-40');
     } else {
       //off
       photosControl.classList.remove('bg-green-500', 'border-black');
@@ -298,6 +301,8 @@
       main.classList.remove('md:grid', 'md:grid-cols-2', 'md:gap-4');
       photosBox.classList.remove('md:grid');
       compareControl.classList.add('md:inline');
+      iconLeft.classList.remove('lg:-translate-y-24', 'lg:w-40');
+      iconLeft.classList.add('sm:-translate-y-24', 'sm:w-40');
     }
   }
 
