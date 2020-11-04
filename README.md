@@ -1,6 +1,6 @@
 # Weather App 🌤
 
-[**Live Version**](https://wisecoding.github.io/weather-app/) - [Project](https://github.com/WiseCoding/weather-app/projects/1)
+[**Live Version**](https://mattiasbonte.github.io/weather-app/) - [Project](https://github.com/mattiasbonte/weather-app/projects/1)
 
 # Assignment 📝
 
@@ -24,7 +24,7 @@
 
 # The Team 👥
 
-- [👨🏼‍💻Mattias](https://github.com/WiseCoding/)
+- [👨🏼‍💻Mattias](https://github.com/mattiasbonte/)
 
 # Built with 🛠
 
