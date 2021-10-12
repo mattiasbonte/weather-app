@@ -3,5 +3,7 @@
 # *.ext          (Extention ingored)
 
 #MACOS
-*.DS_store
-images/.DS_Store
+**/*.DS_store
+weather-app.code-workspace
+.vscode/
+.DS_Store
