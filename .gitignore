@@ -2,8 +2,9 @@
 # foldername/    (Folder ignored)
 # *.ext          (Extention ingored)
 
+node_modules/
+
 #MACOS
 **/*.DS_store
 weather-app.code-workspace
-.vscode/
 .DS_Store

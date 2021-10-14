@@ -1,0 +1,24 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "[**Live Version**](https://mattiasbonte.github.io/weather-app/) - [Project](https://github.com/mattiasbonte/weather-app/projects/1)",
+  "main": "tailwind.config.js",
+  "dependencies": {
+    "tailwindcss": "^2.2.17"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "npx tailwindcss -o ./styles/index.css --jit --watch --minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattiasbonte/weather-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mattiasbonte/weather-app/issues"
+  },
+  "homepage": "https://github.com/mattiasbonte/weather-app#readme"
+}
